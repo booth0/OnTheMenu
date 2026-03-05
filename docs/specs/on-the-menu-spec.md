@@ -16,6 +16,7 @@
 - **Guest:** Browse public recipes, view trending, search.
 - **Registered User (Creator):** Create/edit recipes; set visibility (private/public); save to recipe books; follow others; flag content.
 - **Moderator:** Review flagged content, take moderation actions.
+- **Admin:** Manage moderator access and policies; full moderation-level access including assigning/removing moderators, configuring moderation queues/policies, and viewing moderation audit logs.
 - **System:** Recommender, trending calculator, search indexer.
 
 **High-level Features**
@@ -75,7 +76,7 @@
 - **Trending page:** Shows recipes ranked by a time-weighted score (combination of views, saves, likes, reviews/comments) with a default timeframe of the last 7 days.
 - **Search page:** Full-text search over title, ingredients, tags, and author; filters for visibility (public only for guests), tags, cook time, difficulty, and sort options (relevance, newest, trending).
 - **Recipe Books:** Users can create named recipe books (collections) and add saved recipes; books can be private or public.
-- **Moderation:** Flagging flows; moderators can review flagged items and perform actions (dismiss, remove content, suspend user). Audit logs of moderation actions retained. Moderation is manual; community flagging surfaces items to the moderator queue.
+- **Moderation:** Flagging flows; moderators can review flagged items and perform actions (dismiss, remove content, suspend user). Audit logs of moderation actions retained. Moderation is manual; community flagging surfaces items to the moderator queue. Admins can manage which users have moderator privileges, configure moderation policies/queues, and access full moderation audit logs.
 - **Related / Recommended Recipes component:** On recipe pages, surface related recipes based on tag overlap, ingredient similarity, and collaborative signals (users who saved this also saved...). The component is reusable and embeddable in lists and detail views.
 
 **Optional / Future Features**
@@ -97,6 +98,7 @@
 - FR-04: Search endpoint returns results ranked by relevance and supports filters: tags, cook time range, difficulty, author.
 - FR-05: Users can create named recipe books and add/remove recipes; books have `visibility` similar to recipes.
 - FR-06: Moderation queue exposes flagged items to moderators with metadata and allows actions with audit logging. Moderation is manual: community flagging surfaces items into a moderator review queue for human decision and action.
+- FR-08: Admin users must be able to assign and revoke moderator roles, configure moderation queues/policies (e.g., thresholds for auto-escalation), and view/export moderation audit logs. All admin moderation-management actions MUST be audited.
 - FR-07: Related/Recommended component must return at least 3 recommendations, with the ability to fall back to tag-based recommendations if collaborative signals are insufficient.
 
 **Success Criteria (Measurable)**

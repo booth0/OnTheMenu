@@ -1,4 +1,4 @@
-# [Your Project Name] — Architecture Decision Record
+# OnTheMenu — Architecture Decision Record
 
 **Decision Title:** [e.g., Select SvelteKit for Capstone Web App]
 **Status:** [Proposed | Accepted]

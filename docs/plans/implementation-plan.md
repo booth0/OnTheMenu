@@ -1,88 +1,80 @@
-OnTheMenu — Phased Implementation Plan
+
+OnTheMenu — Accelerated Implementation Plan (deadline: 2026-04-07)
 
 Overview
-- Stack: Next.js (React) frontend, PostgreSQL via Supabase for data/storage, hosted SSR-capable frontend (Vercel or similar). Images: Cloudinary or Supabase Storage (TBD).
-- MVP priority (from user): Recipe CRUD → Likes/Reviews → Moderation → Related/Recommended → Trending → Recipe Books
+- Stack: Next.js (React) frontend, PostgreSQL via Supabase for data/storage, hosted on an SSR-capable platform (Vercel or Supabase). Images: Cloudinary or Supabase Storage (TBD).
+- Hard deadline: 2026-04-07. Plan compressed to meet that date — prioritizes the true MVP scope: Recipe CRUD, Auth, Likes/Reviews, Moderation, Basic Recommendations, and basic Search/Trending.
 
-Phases
+Schedule & Phases (compressed)
 
-Phase 0 — Project Setup & Foundation (week 0)
-- Goals: repo, basic infra, developer experience, CI, coding standards.
-- Key tasks:
-  - Initialize monorepo (or single Next.js app) and README. (AC: devs can run project locally)
-  - Add linters/formatters: ESLint, Prettier. (AC: lint runs in CI)
-  - Create `package.json` scripts for dev/build/test. (AC: `npm run dev`, `build`, `test` work)
-  - Create Supabase project stub and tenant notes. (AC: Supabase project exists for dev)
-  - Create initial database schema migration folder. (AC: migration applies)
+Sprint A — Setup & Core API (Mar 7 — Mar 13)
+- Goals: project foundation, auth, core recipe model and DB migrations.
+- Must-have deliverables:
+  - Repo scaffold: Next.js + TypeScript, scripts (`dev`, `build`, `test`).
+  - CI basic: lint + test pipeline.
+  - Supabase dev project & initial migrations.
+  - Auth: Email/username+password (unique username).
+  - Recipe API: basic create/read/update/delete with `visibility` enforcement.
 
-Phase 1 — Core MVP Backend & Frontend (weeks 1–3)
-- Goals: basic recipe CRUD, auth, and public view flows.
-- Key tasks:
-  - Auth: Email/username+password (profile username unique). (AC: signup/login/logout works)
-  - Recipe model & API: create/read/update/delete endpoints, access control for `visibility`. (AC: private recipes inaccessible to others)
-  - Frontend pages: recipe create/edit form, recipe detail, profile, list pages. (AC: form submits and shows recipe)
-  - Image upload integration (placeholder): support image attachments for recipes (defer CDN choice). (AC: images upload and display)
-  - Tests: unit tests for core business logic; basic e2e for recipe create/view. (AC: CI passes tests)
+Sprint B — Frontend Recipe Flows & Images (Mar 14 — Mar 20)
+- Goals: recipe create/edit UI, detail pages, image upload integration (temporary storage if CDN undecided), and tests.
+- Must-have deliverables:
+  - Recipe create/edit form with image upload and client-side validation.
+  - Recipe detail and list pages.
+  - Unit tests and at least one e2e test for recipe creation and view.
 
-Phase 2 — Social + Moderation (weeks 3–5)
-- Goals: likes, reviews, moderation flows, admin controls.
-- Key tasks:
-  - Likes API and UI (one like per user per recipe). (AC: like/unlike reflected in UI and DB)
-  - Reviews model & UI (rating 1–5, text, optional images). (AC: reviews stored, displayed, and aggregate rating calculated)
-  - Moderation: flagging, moderator queue, admin role for assigning moderators. (AC: moderators can act; audit logs recorded)
-  - Add moderation tests and audit log checks. (AC: moderation actions logged and auditable)
+Sprint C — Social Features & Moderation (Mar 21 — Mar 27)
+- Goals: likes, reviews (rating+text+images), flagging, moderator queue, admin assignment.
+- Must-have deliverables:
+  - Likes API + UI (enforce one like per user).
+  - Reviews model & UI (rating 1–5, optional text/images).
+  - Moderation: flagging endpoint, moderator queue UI/filters, admin role to manage moderators, audit logging of actions.
 
-Phase 3 — Discovery & Recommendations (weeks 5–8)
-- Goals: search/trending and basic recommendations component.
-- Key tasks:
-  - Search: index recipes (title, ingredients, tags), filters, and pagination. (AC: relevant results returned)
-  - Trending endpoint: implement scoring (views, saves, likes, reviews) with time-decay. (AC: trending list available)
-  - Related/Recommended component: tag/ingredient and collaborative fallback. (AC: component returns >=3 items)
-  - Caching and background jobs (recommendation compute). (AC: recommenders run off main request path)
+Sprint D — Discovery (Search & Trending) + Recommendations (Mar 28 — Apr 3)
+- Goals: basic search, trending endpoint, and related/recommendations component.
+- Must-have deliverables:
+  - Search API (title, ingredients, tags) with filters and pagination.
+  - Trending endpoint using views/saves/likes/reviews with simple time-decay.
+  - Related/Recommended component (tag/ingredient-based fallback; collaborative signals if available).
 
-Phase 4 — Polish, Scale, and Release (weeks 8–12)
-- Goals: recipe books, shopping list prototype, observability, perf and accessibility.
-- Key tasks:
-  - Recipe books (collections): create/edit/add/remove recipes. (AC: users manage collections)
-  - Optional features: shopping lists and pantry-based recommendations (prototype). (AC: basic shopping list export)
-  - Performance budgets, instrumentation, SLOs, and accessibility audits. (AC: meet defined thresholds)
-  - Prepare production Supabase project, secrets, and deploy to chosen hosting. (AC: production deployment configured)
+Hardening & Release (Apr 4 — Apr 7)
+- Goals: testing, performance checks, accessibility, deploy to staging/production.
+- Must-have deliverables:
+  - Run full CI, fix critical failures.
+  - Performance smoke checks and accessibility baseline (WCAG AA spot checks).
+  - Configure production Supabase (secrets, backups), deploy Next.js to hosting, and run smoke tests.
+  - Buffer for critical bug fixes and final polish.
 
-Kanban-style Tasks (suggested Trello/Board cards)
+Scope adjustments to meet deadline
+- Defer non-essential features to backlog: Recipe Books, Shopping lists, advanced recommenders, import/export, multi-language.
+- Use managed services where possible (Supabase Auth/Storage, Cloudinary) to reduce ops work.
 
-Backlog (future / low priority)
-- Import/export recipes
-- Social follow feeds
-- Multi-language support
+Kanban / Priority Cards (top-priority for April 7)
+- Repo scaffold: Next.js + TypeScript, CI (lint/test)
+- Supabase dev project + migrations
+- Auth: Email/username+password
+- Recipe CRUD API
+- Recipe create/edit UI + image upload
+- Unit & e2e tests for recipe flow
+- Likes API/UI
+- Reviews model/UI
+- Flagging + moderator queue + admin management
+- Search API
+- Trending endpoint
+- Related/Recommended component
 
-To Do (high priority)
-- Repo: Initialize Next.js + TypeScript skeleton — owner: dev, estimate: 1d
-- Supabase: Create dev project and initial migrations — owner: dev, estimate: 1d
-- Auth: Implement email+username+password auth — owner: backend, estimate: 2d
-- Recipe CRUD API endpoints — owner: backend, estimate: 3d
-- Recipe create/edit UI + image upload flow — owner: frontend, estimate: 3d
+Acceptance & Release Criteria (by 2026-04-07)
+- Core user flows: signup, create recipe, publish (make public), view recipe, like, and review — all working end-to-end.
+- Moderation: flags appear in queue; moderators/admins can take actions with audit logs.
+- Basic discovery: search + trending + related recipes available and functional.
+- CI passing and production deployment completed with basic smoke tests.
 
-In Progress (example cards)
-- Implement likes API and UI — owner: frontend/backend, estimate: 2d
-- Implement reviews model and UI — owner: frontend/backend, estimate: 3d
+Risks & Mitigations
+- Risk: Too many features for time window → Mitigation: freeze scope to the prioritized list; move others to backlog.
+- Risk: Image/CDN integration delays → Mitigation: use Supabase Storage or direct Cloudinary uploads (choose fastest integration).
+- Risk: Unexpected infra/config issues → Mitigation: allocate buffer days (Apr 4–7) for deployment and fixes.
 
-Done (example)
-- Linter & formatting configured
+Next steps I can take
+- Break Sprint A into detailed subtasks and create Trello/GitHub cards, or
+- Generate DB schema and API contracts for Sprint A items.
 
-Card Template (copy into Trello card description)
-- Title: [Short title]
-- Description: [What this does and why]
-- Acceptance Criteria: - [ ] criteria 1 - [ ] criteria 2
-- Assignee: [name]
-- Estimate: [days]
-- Labels: backend/frontend/infra/UX/QA
-
-Acceptance & Release Criteria
-- MVP release when: Recipe CRUD, Auth, Likes/Reviews, Moderation basic flows, Search/Trending basic, and CI passing.
-
-Next actions I can take
-- Expand Phase 1 into detailed epics/stories with API contracts and DB schema, or
-- Create a Trello-friendly CSV of cards ready for import.
-
-Notes
-- We will use Supabase for Postgres and optional Edge Functions; prefer Vercel for Next.js hosting unless you prefer Supabase platform for simplicity.

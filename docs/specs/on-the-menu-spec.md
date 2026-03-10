@@ -1,4 +1,4 @@
-**OnTheMenu — Project Specification**
+git**OnTheMenu — Project Specification**
 
 - **Name:** OnTheMenu
 - **Type:** Web application — recipe sharing and discovery

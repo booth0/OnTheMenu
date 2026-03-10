@@ -26,6 +26,3 @@ Docs & plans
 
 Contributing
 - Open issues or create PRs against the main branch. Follow code style (ESLint/Prettier) and include tests for new functionality.
-
-License
-- (Add your license here)

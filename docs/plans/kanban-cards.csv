@@ -1,21 +1,17 @@
 Title,Description,Acceptance Criteria,Assignee,Estimate,Labels,Status
-Initialize Next.js + TypeScript skeleton,Create Next.js app with TypeScript, dev/build/test scripts working; README with run instructions,dev,1,infra/frontend,To Do
-Configure linters and formatters,Add ESLint and Prettier and CI lint job,CI lint passes and blocks merge on failure,dev,0.5,infra/ci,To Do
-Create Supabase dev project & migrations,Provision Supabase dev instance and add initial migration file,Migrations apply successfully to dev DB,dev,1,infra,To Do
-Implement Auth (email/username+password),Signup/login/logout, unique username as profile id,Auth flows working; unique username enforced,backend,2,backend,To Do
-Recipe CRUD API endpoints,Create/read/update/delete recipes, access control for `visibility`,Private recipes inaccessible to other users; API tests pass,backend,3,backend,To Do
-Recipe create/edit UI + image upload,Frontend forms for recipe create/edit with image attachments,Recipe submits, images upload and display,frontend,3,frontend,To Do
-Unit tests for core logic and e2e for recipe flow,Write unit tests and basic Cypress/Playwright e2e,CI tests pass,qa,2,qa,To Do
-Implement Likes API and UI,One active like per user per recipe; like/unlike reflected in UI,Like count increments/decrements; DB enforces uniqueness,frontend/backend,2,frontend/backend,In Progress
-Implement Reviews model and UI,Reviews with rating(1-5), text, optional images; displayed on recipe page,Reviews stored and displayed; avg rating calculated; moderation possible,frontend/backend,3,frontend/backend,In Progress
-Moderation queue & admin management,Flagging, moderator queue, admin assign/revoke moderators,Moderators can act and audit logs recorded; admins manage roles,backend,3,backend/infra,To Do
-Search index & API,Full-text search over title, ingredients, tags; filters and pagination,Search returns relevant results and supports filters,backend,3,backend,To Do
-Trending endpoint,Implement scoring using views/saves/likes/reviews with time-decay,Trending list returns expected items and respects timeframe,backend,3,backend,To Do
-Related/Recommended component,Tag/ingredient similarity and collaborative fallback,Component returns >=3 recommendations; cached/background compute,frontend/backend,3,frontend/backend,To Do
-Recipe Books (collections),Create/edit named recipe books; add/remove recipes,Users can manage collections and set visibility,frontend/backend,2,frontend/backend,To Do
-Shopping list prototype,Convert recipe ingredients to shopping list; export/share,Combine ingredients from multiple recipes into a list,frontend/backend,2,frontend,To Do
-Performance & accessibility audit,Set perf budgets and run accessibility checks,Meet defined LCP/API SLOs and WCAG AA for primary flows,devops,3,infra/qa,To Do
-Prepare production Supabase & deploy,Configure prod Supabase, secrets, and deploy to hosting,Production deployment configured and smoke tests pass,devops,2,infra,To Do
-Backlog: Import/export recipes,CSV/JSON import and export functionality,Import/export works for sample datasets,backend,4,backend/backlog,Backlog
-Backlog: Social follow feeds,Follow users and personalized feed,Follow/unfollow works and feed populates with followed users' recipes,backend/frontend,4,feature,Backlog
-Backlog: Multi-language support,Internationalization of UI and content,UI supports at least 2 locales and content stored appropriately,frontend,5,feature,Backlog
+"T001 - Repo scaffold & README","Create repository scaffold, basic README, and contributing guide","Repo contains README with setup steps; contributing.md added; lint and format commands documented","All Devs",1,infra;docs,To Do
+"T002 - Initialize Next.js app","Create Next.js app skeleton with TypeScript and ESLint/Prettier","`npm run dev` starts app; lint passes; TypeScript config present","All Devs",2,frontend;infra,To Do
+"T003 - Supabase dev project","Provision Supabase dev project and set up env secrets","Database and Auth accessible; `.env.local` example added","All Devs",1,backend;infra,To Do
+"T004 - CI pipeline (lint & tests)","Add CI workflow that runs lint and tests on PRs","CI runs on PRs and reports status; lint step included","All Devs",2,ci;infra,To Do
+"T005 - Authentication (Supabase Auth)","Integrate Supabase Auth for email + username sign-up/sign-in","Users can sign up and sign in; username stored and unique","All Devs",3,backend;auth,To Do
+"T006 - Recipe API (CRUD)","Design DB schema for Recipe and implement CRUD endpoints","Create, read, update, delete recipes via API; schema migration added","All Devs",4,backend;api,To Do
+"T007 - Recipe model & migrations","Add SQL migration and ORM model for recipes","Migration file present; model maps to DB schema","All Devs",2,backend;db,To Do
+"T008 - Recipe UI (create & view)","Implement recipe create form and recipe view page","Form saves recipe; view page displays recipe and images","All Devs",4,frontend;feature,To Do
+"T009 - Image uploads (storage)","Implement image upload using chosen storage (Supabase or Cloudinary)","Images upload, store, and display with recipes","All Devs",3,infra;feature,To Do
+"T010 - Likes & Reviews","Implement likes and reviews backend and UI","Users can like recipes and post reviews with optional images","All Devs",4,feature;backend,To Do
+"T011 - Moderation & Admin","Add moderation queue, flagging, and Admin controls","Flagged items appear in moderator queue; Admin can remove content","All Devs",3,ops;feature,To Do
+"T012 - Trending & Related recommendations","Implement basic trending algorithm and related suggestions","Trending list returns results; related recipes show on recipe page","All Devs",3,feature;ml,To Do
+"T013 - Search","Add search index and search UI for recipes","Search returns relevant recipes with filters","All Devs",3,feature;api,To Do
+"T014 - Recipe books (collections)","Implement user recipe books (save/organize recipes)","Users can create books and add/remove recipes","All Devs",3,feature,To Do
+"T015 - End-to-end tests","Add E2E tests for core flows (auth, create recipe, like, review)","E2E tests run in CI and pass consistently","All Devs",2,qa;ci,To Do
+"T016 - Polish & accessibility","Run accessibility audit, performance tuning, and polish UI","A11y score improved; basic Lighthouse checks pass","All Devs",2,polish;qa,To Do

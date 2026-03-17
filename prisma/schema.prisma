@@ -24,19 +24,20 @@ enum FlagStatus {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String?  @unique
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String     @id @default(uuid())
+  username   String     @unique
+  email      String?    @unique
+  password   String
+  role       Role       @default(USER)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 
-  recipes         Recipe[]         @relation("author_recipes")
-  reviews         Review[]         @relation("author_reviews")
-  likes           Like[]
-  images          Image[]
-  recipeBooks     RecipeBook[]
-  moderationFlags ModerationFlag[]
+  recipes    Recipe[]   @relation("author_recipes")
+  reviews    Review[]   @relation("author_reviews")
+  likes      Like[]
+  images     Image[]
+  recipeBooks RecipeBook[]
+  flags      ModerationFlag[]
 }
 
 model Recipe {
@@ -51,10 +52,11 @@ model Recipe {
   authorId         String
   author           User       @relation(fields: [authorId], references: [id], name: "author_recipes")
 
-  reviews Review[]
-  likes   Like[]
-  images  Image[]
-  books   RecipeBookItem[]
+  reviews       Review[]
+  likes         Like[]
+  images        Image[]
+  books         RecipeBookItem[]
+  flags         ModerationFlag[]
 
   viewsCount      Int              @default(0)
   createdAt       DateTime         @default(now())
@@ -63,16 +65,16 @@ model Recipe {
 }
 
 model Review {
-  id              String           @id @default(uuid())
-  recipeId        String
-  recipe          Recipe           @relation(fields: [recipeId], references: [id])
-  authorId        String
-  author          User             @relation(fields: [authorId], references: [id], name: "author_reviews")
-  rating          Int
-  body            String?
-  images          Image[]
-  createdAt       DateTime         @default(now())
-  moderationFlags ModerationFlag[]
+  id         String    @id @default(uuid())
+  recipeId   String
+  recipe     Recipe    @relation(fields: [recipeId], references: [id])
+  authorId   String
+  author     User      @relation(fields: [authorId], references: [id], name: "author_reviews")
+  rating     Int
+  body       String?
+  images     Image[]
+  flags      ModerationFlag[]
+  createdAt  DateTime  @default(now())
 }
 
 model Like {

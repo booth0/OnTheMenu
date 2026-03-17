@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -25,51 +24,55 @@ enum FlagStatus {
 }
 
 model User {
-  id         String     @id @default(uuid())
-  username   String     @unique
-  email      String?    @unique
-  role       Role       @default(USER)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String?  @unique
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  recipes    Recipe[]   @relation("author_recipes")
-  reviews    Review[]   @relation("author_reviews")
-  likes      Like[]
-  images     Image[]
-  recipeBooks RecipeBook[]
+  recipes         Recipe[]         @relation("author_recipes")
+  reviews         Review[]         @relation("author_reviews")
+  likes           Like[]
+  images          Image[]
+  recipeBooks     RecipeBook[]
+  moderationFlags ModerationFlag[]
 }
 
 model Recipe {
-  id            String       @id @default(uuid())
-  slug          String       @unique
-  title         String
-  description   String?
-  body          String       // markdown or rich text
-  visibility    Visibility   @default(PRIVATE)
-  featuredImage String?
-  authorId      String
-  author        User         @relation(fields: [authorId], references: [id], name: "author_recipes")
+  id               String     @id @default(uuid())
+  slug             String     @unique
+  title            String
+  description      String?
+  ingredients      String[]
+  directions       String[] // markdown or rich text
+  visibility       Visibility @default(PRIVATE)
+  featuredImageUrl String?
+  authorId         String
+  author           User       @relation(fields: [authorId], references: [id], name: "author_recipes")
 
-  reviews       Review[]
-  likes         Like[]
-  images        Image[]
-  books         RecipeBookItem[]
+  reviews Review[]
+  likes   Like[]
+  images  Image[]
+  books   RecipeBookItem[]
 
-  viewsCount    Int          @default(0)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  viewsCount      Int              @default(0)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  moderationFlags ModerationFlag[]
 }
 
 model Review {
-  id         String    @id @default(uuid())
-  recipeId   String
-  recipe     Recipe    @relation(fields: [recipeId], references: [id])
-  authorId   String
-  author     User      @relation(fields: [authorId], references: [id], name: "author_reviews")
-  rating     Int
-  body       String?
-  images     Image[]
-  createdAt  DateTime  @default(now())
+  id              String           @id @default(uuid())
+  recipeId        String
+  recipe          Recipe           @relation(fields: [recipeId], references: [id])
+  authorId        String
+  author          User             @relation(fields: [authorId], references: [id], name: "author_reviews")
+  rating          Int
+  body            String?
+  images          Image[]
+  createdAt       DateTime         @default(now())
+  moderationFlags ModerationFlag[]
 }
 
 model Like {
@@ -96,23 +99,23 @@ model Image {
 }
 
 model RecipeBook {
-  id        String              @id @default(uuid())
-  ownerId   String
-  owner     User                @relation(fields: [ownerId], references: [id])
-  title     String
+  id          String           @id @default(uuid())
+  ownerId     String
+  owner       User             @relation(fields: [ownerId], references: [id])
+  title       String
   description String?
-  items     RecipeBookItem[]
-  createdAt DateTime            @default(now())
+  items       RecipeBookItem[]
+  createdAt   DateTime         @default(now())
 }
 
 model RecipeBookItem {
-  id         String   @id @default(uuid())
-  bookId     String
-  book       RecipeBook @relation(fields: [bookId], references: [id])
-  recipeId   String
-  recipe     Recipe   @relation(fields: [recipeId], references: [id])
-  position   Int?
-  addedAt    DateTime @default(now())
+  id       String     @id @default(uuid())
+  bookId   String
+  book     RecipeBook @relation(fields: [bookId], references: [id])
+  recipeId String
+  recipe   Recipe     @relation(fields: [recipeId], references: [id])
+  position Int?
+  addedAt  DateTime   @default(now())
 
   @@unique([bookId, recipeId])
 }

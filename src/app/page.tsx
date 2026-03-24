@@ -9,12 +9,11 @@ export default function HomePage() {
   const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
-    setLoggedIn(!!localStorage.getItem('sessionId'))
+    setLoggedIn(document.cookie.split(';').some(c => c.trim().startsWith('loggedIn=')))
   }, [])
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })
-    localStorage.removeItem('sessionId')
     setLoggedIn(false)
     router.refresh()
   }

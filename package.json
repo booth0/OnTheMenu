@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "bcryptjs": "^3.0.3",
     "jose": "^6.2.1",
@@ -15,7 +16,8 @@
     "lucide-react": "^0.577.0",
     "nanoid": "^5.1.6",
     "next": "^15.0.0",
-    "prisma": "^5.22.0",
+    "pg": "^8.20.0",
+    "prisma": "^7.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

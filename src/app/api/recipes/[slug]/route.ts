@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = params;
+    const { slug } = await params;
+    console.log("Fetching recipe with slug:", slug); // Debug log
     const recipe = await prisma.recipe.findUnique({
         where: { slug },
     });
@@ -13,7 +14,7 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
 }
 
 export async function PUT(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await req.json();
     // Check ownership or permissions here (not implemented)
     try {
@@ -35,7 +36,7 @@ export async function PUT(req: Request, { params }: { params: { slug: string } }
 }
 
 export async function DELETE(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = params;
+    const { slug } = await params;
     // Check ownership or permissions here (not implemented)
     try {
         await prisma.recipe.delete({

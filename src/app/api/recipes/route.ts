@@ -23,10 +23,11 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
+        console.log("Received recipe data:", body); // Debug log
         if (!body.title) {
             return NextResponse.json({error: "Title is required"}, {status: 400});
         }
-        if (!Array.isArray(body.ingredients) || Array.isArray(body.directions)) {
+        if (!Array.isArray(body.ingredients) || !Array.isArray(body.directions)) {
             return new NextResponse('Ingredients and directions must be arrays', {status: 400});
         }
 

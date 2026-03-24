@@ -2,33 +2,28 @@
 import { Star, ThumbsUp, Bookmark } from "lucide-react";
 import { useState } from "react";
 import Button from "@/components/ui/button";
+import ImageViewer from "@/components/ui/imageViewer";
+import { useParams } from "next/navigation";
 
-export default function RecipePage() {
-    let title = "Gluten Free Blueberry Pancakes";
-    let featuredImageUrl = "https://picsum.photos/400/300";
-    let author = "John Doe";
-    let rating = 4.5;
-    let likes = 120;
-    let saves = 45;
-    let reviews = 30;
-    let [likedByUser, setLikedByUser] = useState(true);
-    let [savedByUser, setSavedByUser] = useState(false);
-    let ingredients = [
-        "1 Cup rolled oats",
-        "1/2 C milk of choice",
-        "1 banana",
-        "1 Tbsp baking powder",
-        "1 Tbsp apple cider vinegar",
-        "1 Tbsp maple syrup",
-        "1 tsp vanilla extract",
-        "1/2 C Blueberries fresh or frozen",
-        "1/4 C Almonds sliced",
-        "Dash of salt"
-    ]
-    let directions = [
-        "In a high speed blender or food processor add all your ingredients except for the blueberries and nuts, and blend until a thick batter remains. Fold in the blueberries and nuts.",
-        "Preheat a lightly greased pan on medium heat. Once hot, pour the batter into the pan. Cook until the edges start to brown and bubble the flip and cook for another minute or two. These need more time than you think…"
-    ]
+
+export default async function RecipePage() {
+    
+    const params = useParams<{ slug: string }>();
+    const slug = params.slug;
+    const recipe = await fetch(`/api/recipes/${slug}`).then(res => res.json());
+
+    console.log("Recipe slug:", slug); // Debug log
+    let title = recipe.title;
+    let featuredImageUrl = recipe.featuredImageUrl;
+    let author = recipe.author;
+    let rating = recipe.rating;
+    let likes = recipe.likes;
+    let saves = recipe.saves;
+    let reviews = recipe.reviews;
+    let [likedByUser, setLikedByUser] = useState(recipe.likedByUser);
+    let [savedByUser, setSavedByUser] = useState(recipe.savedByUser);
+    let ingredients = recipe.ingredients;
+    let directions = recipe.directions;
     return (
         <main>
             <style>
@@ -86,7 +81,6 @@ export default function RecipePage() {
                     }
                 `}
             </style>
-            <div className="navWillGoHere"></div>
             <div className="container">
                 <div className="card">
                     <div className="overview">
@@ -116,25 +110,18 @@ export default function RecipePage() {
                     </h4>
                 </div>
                 <div className="card">
-                    <div className="imageViewer">
-                        <img src={featuredImageUrl} className="featuredImage" alt={title}/>
-                        <div className="imageMinis">
-                            <img src={featuredImageUrl} alt={title} className="active"/>
-                            <img src={featuredImageUrl} alt={title}/>
-                            <img src={featuredImageUrl} alt={title}/>
-                        </div>
-                    </div>
+                    <ImageViewer title={title} featuredImageUrl={featuredImageUrl} images={[featuredImageUrl, "https://static.vecteezy.com/system/resources/thumbnails/045/132/934/small/a-beautiful-picture-of-the-eiffel-tower-in-paris-the-capital-of-france-with-a-wonderful-background-in-wonderful-natural-colors-photo.jpg"]} />
                 </div>
                 <div className="card light">
                     <h2>Ingredients - <span>{ingredients.length}</span></h2>
                     <ul>
-                        {ingredients.map((ingredient, index) => <li className="ingredient" key={index}>{ingredient}</li>)}
+                        {ingredients.map((ingredient: any, index: any) => <li className="ingredient" key={index}>{ingredient}</li>)}
                     </ul>
                 </div>
                 <div className="card light">
                     <h2>Directions</h2>
                     <ol>
-                        {directions.map((direction, index) => <li className="direction" key={index}><span className="index">{index + 1}</span><span>{direction}</span></li>)}
+                        {directions.map((direction: any, index: any) => <li className="direction" key={index}><span className="index">{index + 1}</span><span>{direction}</span></li>)}
                     </ol>
                 </div>
             </div>

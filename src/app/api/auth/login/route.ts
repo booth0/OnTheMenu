@@ -22,14 +22,15 @@ export async function POST(req: NextRequest) {
     { expiresIn: '7d' }
   )
 
-  const sessionId = crypto.randomUUID()
-  const response = NextResponse.json({ sessionId })
-  response.cookies.set('token', token, {
-    httpOnly: true,
+  const cookieOptions = {
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
-  })
+    sameSite: 'lax' as const,
+    maxAge: 60 * 60 * 24 * 7,
+  }
+
+  const response = NextResponse.json({ ok: true })
+  response.cookies.set('token', token, { ...cookieOptions, httpOnly: true })
+  response.cookies.set('loggedIn', 'true', cookieOptions)
 
   return response
 }

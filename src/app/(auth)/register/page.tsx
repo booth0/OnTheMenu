@@ -9,7 +9,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (localStorage.getItem('sessionId')) router.replace('/')
+    if (document.cookie.split(';').some(c => c.trim().startsWith('loggedIn='))) router.replace('/')
   }, [router])
 
   async function handleSubmit(formData: FormData) {
@@ -28,7 +28,12 @@ export default function RegisterPage() {
     })
 
     if (res.ok) {
-      router.push('/login')
+      await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: body.username, password: body.password }),
+      })
+      router.push('/')
     } else {
       const data = await res.json()
       setError(data.error || 'Something went wrong')

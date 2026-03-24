@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (localStorage.getItem('sessionId')) router.replace('/')
+    if (document.cookie.split(';').some(c => c.trim().startsWith('loggedIn='))) router.replace('/')
   }, [router])
 
   async function handleSubmit(formData: FormData) {
@@ -27,8 +27,6 @@ export default function LoginPage() {
     })
 
     if (res.ok) {
-      const data = await res.json()
-      localStorage.setItem('sessionId', data.sessionId)
       router.push('/')
     } else {
       const data = await res.json()

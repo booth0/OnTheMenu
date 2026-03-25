@@ -2,15 +2,65 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = await params;
-    console.log("Fetching recipe with slug:", slug); // Debug log
-    const recipe = await prisma.recipe.findUnique({
-        where: { slug },
-    });
-    if (!recipe) {
-        return new NextResponse(JSON.stringify({ error: "Recipe not found" }), { status: 404 });
+    const { slug } = params;
+    console.log("Fetching recipe with slug:", slug);
+
+    try {
+        const recipe = await prisma.recipe.findUnique({
+            where: { slug },
+        });
+
+        if (!recipe) {
+            return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+        }
+
+        return NextResponse.json(recipe);
+    } catch (err: any) {
+        if (err?.code !== "P2022") {
+            return NextResponse.json({ error: err?.message ?? "Failed to fetch recipe" }, { status: 500 });
+        }
+
+        const legacyRows = await prisma.$queryRaw<Array<{
+            id: string;
+            slug: string;
+            title: string;
+            description: string | null;
+            body: string;
+            visibility: "PUBLIC" | "PRIVATE";
+            featuredImage: string | null;
+            authorId: string;
+            createdAt: Date;
+            updatedAt: Date;
+        }>>`
+            SELECT id, slug, title, description, body, visibility, "featuredImage", "authorId", "createdAt", "updatedAt"
+            FROM "Recipe"
+            WHERE slug = ${slug}
+            LIMIT 1
+        `;
+
+        const legacyRecipe = legacyRows[0];
+
+        if (!legacyRecipe) {
+            return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({
+            id: legacyRecipe.id,
+            slug: legacyRecipe.slug,
+            title: legacyRecipe.title,
+            description: legacyRecipe.description,
+            visibility: legacyRecipe.visibility,
+            featuredImageUrl: legacyRecipe.featuredImage,
+            authorId: legacyRecipe.authorId,
+            ingredients: [],
+            directions: legacyRecipe.body
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean),
+            createdAt: legacyRecipe.createdAt,
+            updatedAt: legacyRecipe.updatedAt,
+        });
     }
-    return NextResponse.json(recipe);
 }
 
 export async function PUT(req: Request, { params }: { params: { slug: string } }) {

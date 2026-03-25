@@ -1,29 +1,152 @@
 "use client"
 import { Star, ThumbsUp, Bookmark } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
 import ImageViewer from "@/components/ui/imageViewer";
 import { useParams } from "next/navigation";
 
 
-export default async function RecipePage() {
-    
+type RecipeResponse = {
+    title: string;
+    featuredImageUrl: string | null;
+    rating?: number;
+    likes?: number;
+    saves?: number;
+    reviews?: number;
+    likedByUser?: boolean;
+    savedByUser?: boolean;
+    ingredients: string[];
+    directions: string[];
+    authorId?: string | null;
+};
+
+type UserResponse = {
+    id: string;
+    username: string;
+}
+
+async function getAuthorName(authorId: string | null | undefined) {
+    if (!authorId) return "Unknown Author";
+    try {
+        const response = await fetch(`/api/users/${authorId}`);
+        if (!response.ok) {
+            return "Unknown Author";
+        }
+        const userInfo = (await response.json()) as UserResponse | null;
+        return userInfo?.username ?? "Unknown Author";
+    } catch {
+        return "Unknown Author";
+    }
+}
+
+export default function RecipePage() {
     const params = useParams<{ slug: string }>();
     const slug = params.slug;
-    const recipe = await fetch(`/api/recipes/${slug}`).then(res => res.json());
 
-    console.log("Recipe slug:", slug); // Debug log
-    let title = recipe.title;
-    let featuredImageUrl = recipe.featuredImageUrl;
-    let author = recipe.author;
-    let rating = recipe.rating;
-    let likes = recipe.likes;
-    let saves = recipe.saves;
-    let reviews = recipe.reviews;
-    let [likedByUser, setLikedByUser] = useState(recipe.likedByUser);
-    let [savedByUser, setSavedByUser] = useState(recipe.savedByUser);
-    let ingredients = recipe.ingredients;
-    let directions = recipe.directions;
+    const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
+    const [authorName, setAuthorName] = useState<string>("Unknown Author");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [likedByUser, setLikedByUser] = useState(false);
+    const [savedByUser, setSavedByUser] = useState(false);
+
+    useEffect(() => {
+        if (!slug) {
+            setError("Recipe slug is missing.");
+            setLoading(false);
+            return;
+        }
+
+        let cancelled = false;
+
+        const loadRecipe = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const res = await fetch(`/api/recipes/${slug}`);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data?.error ?? "Failed to load recipe.");
+                }
+
+                if (cancelled) {
+                    return;
+                }
+
+                setRecipe(data);
+                setLikedByUser(!!data.likedByUser);
+                setSavedByUser(!!data.savedByUser);
+            } catch (err) {
+                if (!cancelled) {
+                    setError(err instanceof Error ? err.message : "Failed to load recipe.");
+                }
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadRecipe();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [slug]);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const fetchAuthorName = async () => {
+            const name = await getAuthorName(recipe?.authorId);
+            if (!cancelled) {
+                setAuthorName(name);
+            }
+        };
+
+        fetchAuthorName();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [recipe?.authorId]);
+
+    if (loading) {
+        return (
+            <main>
+                <div className="container">
+                    <div className="card">
+                        <h1>Loading recipe...</h1>
+                    </div>
+                </div>
+            </main>
+        );
+    }
+
+    if (error || !recipe) {
+        return (
+            <main>
+                <div className="container">
+                    <div className="card">
+                        <h1>Unable to load recipe</h1>
+                        <p>{error ?? "Recipe not found."}</p>
+                    </div>
+                </div>
+            </main>
+        );
+    }
+
+    const title = recipe.title;
+    const featuredImageUrl = recipe.featuredImageUrl;
+    const rating = recipe.rating ?? 0;
+    const likes = recipe.likes ?? 0;
+    const saves = recipe.saves ?? 0;
+    const reviews = recipe.reviews ?? 0;
+    const ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
+    const directions = Array.isArray(recipe.directions) ? recipe.directions : [];
+
     return (
         <main>
             <style>
@@ -86,7 +209,7 @@ export default async function RecipePage() {
                     <div className="overview">
                         <div className="info">
                             <h1 id="title">{title}</h1>
-                            <h3>By <span>{author}</span></h3>
+                            <h3>By <span>{authorName}</span></h3>
                         </div>
                         <div className="buttons">
                             <Button onClick={() => setLikedByUser(!likedByUser)} type="primary"><ThumbsUp fill={likedByUser ? "currentColor" : "none"} size={"1em"} /> {likedByUser ? "Unlike Recipe" : "Like Recipe"}</Button>
@@ -110,7 +233,7 @@ export default async function RecipePage() {
                     </h4>
                 </div>
                 <div className="card">
-                    <ImageViewer title={title} featuredImageUrl={featuredImageUrl} images={[featuredImageUrl, "https://static.vecteezy.com/system/resources/thumbnails/045/132/934/small/a-beautiful-picture-of-the-eiffel-tower-in-paris-the-capital-of-france-with-a-wonderful-background-in-wonderful-natural-colors-photo.jpg"]} />
+                    <ImageViewer title={title} featuredImageUrl={featuredImageUrl ?? ""} images={featuredImageUrl ? [featuredImageUrl] : []} />
                 </div>
                 <div className="card light">
                     <h2>Ingredients - <span>{ingredients.length}</span></h2>

@@ -17,7 +17,7 @@ export default function NewRecipePage() {
         ingredients: [] as string[],
         directions: [] as string[],
         visibility: "PRIVATE",
-        authorId: !!localStorage.getItem('sessionId') || undefined,
+        authorId: undefined as string | undefined,
         featuredImageUrl: null as string | null
     };
     
@@ -46,6 +46,11 @@ export default function NewRecipePage() {
             }
 
             featuredImageUrl = uploadJson.url;
+        }
+
+        const userInfo = await fetch("/api/users/me").then(res => res.json()).catch(() => null);
+        if (userInfo?.id) {
+            recipe.authorId = userInfo.id;
         }
 
         recipe.title = formData.get("title") as string;

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface HeaderProps {
@@ -9,12 +10,14 @@ interface HeaderProps {
 }
 
 export default function Header({ isLoggedIn = false, username }: HeaderProps) {
+  const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
-    console.log('searching for:', searchQuery)
+    const trimmed = searchQuery.trim()
+      router.push(`/search?query=${encodeURIComponent(trimmed)}`) 
   }
 
   return (

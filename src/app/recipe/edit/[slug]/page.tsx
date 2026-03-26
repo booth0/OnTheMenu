@@ -9,7 +9,7 @@ type RecipeFormState = {
   ingredients: string;
   directions: string;
   visibility: "PUBLIC" | "PRIVATE";
-  featuredImageUrl: string | null;
+  featuredImage: string | null;
   authorId?: string;
 };
 
@@ -19,7 +19,7 @@ const emptyRecipe: RecipeFormState = {
   ingredients: "",
   directions: "",
   visibility: "PRIVATE",
-  featuredImageUrl: null,
+  featuredImage: null,
 };
 
 export default function EditRecipePage() {
@@ -33,6 +33,7 @@ export default function EditRecipePage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [recipe, setRecipe] = useState<RecipeFormState>(emptyRecipe);
+  const [newFeaturedImage, setNewFeaturedImage] = useState<File | null>(null);
 
   useEffect(() => {
     setLoggedIn(!!localStorage.getItem('sessionId'));
@@ -69,7 +70,7 @@ export default function EditRecipePage() {
           ingredients: Array.isArray(data.ingredients) ? data.ingredients.join("\n") : "",
           directions: Array.isArray(data.directions) ? data.directions.join("\n") : "",
           visibility: data.visibility === "PUBLIC" ? "PUBLIC" : "PRIVATE",
-          featuredImageUrl: data.featuredImageUrl ?? data.featuredImage ?? null,
+          featuredImage: data.featuredImage ?? null,
           authorId: data.authorId,
         });
       } catch (err) {
@@ -110,7 +111,7 @@ export default function EditRecipePage() {
     setError(null);
 
     try {
-      let featuredImageUrl = recipe.featuredImageUrl;
+      let featuredImage = recipe.featuredImage;
       const formData = new FormData(e.currentTarget);
       const imageFile = formData.get("featuredImage");
 
@@ -131,14 +132,14 @@ export default function EditRecipePage() {
           throw new Error(uploadJson.error ?? "Image upload failed");
         }
 
-        featuredImageUrl = uploadJson.url;
+        featuredImage = uploadJson.url;
       }
 
       const payload = {
         title: recipe.title,
         description: recipe.description,
         visibility: recipe.visibility,
-        featuredImageUrl,
+        featuredImage,
         ingredients: recipe.ingredients.split("\n").map((line) => line.trim()).filter(Boolean),
         directions: recipe.directions.split("\n").map((line) => line.trim()).filter(Boolean),
       };
@@ -188,25 +189,22 @@ export default function EditRecipePage() {
     <main className="container">
       <style>
         {`
-          form{
+          .editForm{
               display: flex;
               flex-direction: column;
               >select, >input, >textarea{
                   margin-bottom: 1em;
+                  padding: 0.5em;
+                font-size: 1em;
+                border: 2px solid var(--primary-color);
+                border-radius: 5px;
               }
-          }
-
-          select, input, textarea{
-              padding: 0.5em;
-              font-size: 1em;
-              border: 2px solid var(--primary-color);
-              border-radius: 5px;
           }
         `}
       </style>
       <h1>Edit Recipe</h1>
       <div className="card">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="editForm">
           <label htmlFor="visibility">Is this recipe public or private?</label>
           <select id="visibility" name="visibility" value={recipe.visibility.toLowerCase()} onChange={handleChange} required>
             <option value="public">Public</option>
@@ -217,12 +215,19 @@ export default function EditRecipePage() {
           <input type="text" id="title" name="title" value={recipe.title} onChange={handleChange} required />
 
           <label htmlFor="featuredImage">Featured Image (optional)</label>
-          <input type="file" id="featuredImage" name="featuredImage" accept="image/*" />
+          <input type="file" id="featuredImage" name="featuredImage" accept="image/*" onChange={(e) => setNewFeaturedImage(e.target.files ? e.target.files[0] : null)}/>
 
-          {recipe.featuredImageUrl ? (
+          {newFeaturedImage ? (
+            <>
+              <label>New featured image preview</label>
+              <img src={URL.createObjectURL(newFeaturedImage)} alt="New featured image preview" style={{ maxWidth: "100%", borderRadius: "8px", marginBottom: "1em" }} />
+            </>
+          ) : null}
+
+          {recipe.featuredImage ? (
             <>
               <label>Current featured image</label>
-              <img src={recipe.featuredImageUrl} alt={`${recipe.title} featured image`} style={{ maxWidth: "100%", borderRadius: "8px", marginBottom: "1em" }} />
+              <img src={recipe.featuredImage} alt={`${recipe.title} featured image`} style={{ maxWidth: "100%", borderRadius: "8px", marginBottom: "1em" }} />
             </>
           ) : null}
 

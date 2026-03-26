@@ -95,26 +95,28 @@ export default function NewRecipePage() {
         <main className="container">
             <style>
                 {`
-                form{
+                .newRecipeForm{
                     display: flex;
                     flex-direction: column;
                     >select, >input, >textarea{
                         margin-bottom: 1em;
+                        padding: 0.5em;
+                        font-size: 1em;
+                        border: 2px solid var(--primary-color);
+                        border-radius: 5px;
+                
                     }
+                    select, input, textarea{
+                        }
                 }
                 
-                select, input, textarea{
-                    padding: 0.5em;
-                    font-size: 1em;
-                    border: 2px solid var(--primary-color);
-                    border-radius: 5px;
-                }
+                
                 
                 `}
             </style>
             <h1>New Recipe</h1>
             <div className="card">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="newRecipeForm">
                     <label htmlFor="visibility">Is this recipe public or private?</label>
                     <select id="visibility" name="visibility" required>
                         <option value="public">Public</option>

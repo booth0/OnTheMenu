@@ -10,7 +10,8 @@ export default function RecipesPage() {
     async function fetchRecipes() {
       const res = await fetch('/api/recipes')
       const data = await res.json()
-      const mapped: RecipeCardRecipe[] = data.recipes.map((r: any) => ({
+      console.log("Fetched recipes:", data); // Debug log
+      const mapped: RecipeCardRecipe[] = data.map((r: any) => ({
         id: r.id,
         slug: r.slug,
         title: r.title,
@@ -31,7 +32,7 @@ export default function RecipesPage() {
   }, [])
 
   return (
-    <main>
+    <main className="container">
       <h1>Browse Recipes</h1>
 
       {recipes.length === 0 && (

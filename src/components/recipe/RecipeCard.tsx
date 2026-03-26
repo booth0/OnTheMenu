@@ -38,15 +38,27 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 	} = recipe;
 
 	return (
-		<article>
+		<article className="card">
+			<style>
+				{`
+					.featuredImage {
+						width: 400px;
+						align-self: center;
+					}
+					.title {
+						font-size: 1.2em;
+						font-weight: bold;
+						color: white;
+						text-decoration: none;
+					}
+				`}
+			</style>
 			{featuredImage && (
-				<div>
-					<img src={featuredImage} alt={title}/>
-				</div>
+					<img src={featuredImage} alt={title} className="featuredImage"/>
 			)}
 
 			<h3>
-				<Link href={`/recipe/${slug}`}>{title}</Link>
+				<Link href={`/recipe/${slug}`} className="title">{title}</Link>
 			</h3>
 
 			{description && <p>{description}</p>}

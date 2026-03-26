@@ -1,8 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 :root{
     --primary-color: #c39259;
+    --primary-shadow: hsl(from var(--primary-color) h s calc(l - 15));
     --secondary-color: #597A9C;
+    --secondary-shadow: hsl(from var(--secondary-color) h s calc(l - 15));
     --accent-color: #FFB5C0;
+    --accent-shadow: hsl(from var(--accent-color) h s calc(l - 15));
     --background-color: #F1CCB7;
+    --background-shadow: hsl(from var(--background-color) h s calc(l - 15));
+    --text-light-color: #ffffff;
     --text-color: #333333;
-    --text-light-color: #FEFAED;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px 30px;
+    color: var(--text-light-color);
+}
+
+.card{
+    background-color: var(--primary-color);
+    border-radius: 24px;
+    padding: 20px;
+    border: var(--text-light-color) solid 3px;
+    box-shadow: 0 10px 0 var(--primary-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+    min-width: 120px;
+    &.light{
+        border-color: var(--primary-color);
+        background-color: var(--text-light-color);
+        color: var(--text-color);
+        box-shadow: 0 10px 0 var(--secondary-color);
+    }
+}
+
+.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 0.5em;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    &.primary {
+        background-color: var(--secondary-color);
+        color: var(--text-light-color);
+        box-shadow: 0 5px 0 var(--secondary-shadow);
+    }
+    &.secondary {
+        background-color: var(--accent-color);
+        color: var(--text-color);
+        box-shadow: 0 5px 0 var(--accent-shadow);
+    }
+}
+
+.imageViewer {
+    max-width: 500px;
+    width:100%;
+    margin: auto;
+    .featuredImage {
+        width: 100%;
+        border-radius: 12px;
+        border: 5px solid var(--secondary-color);
+        margin-bottom: 10px;
+    }
+    .imageMinis{
+        display: grid;
+        grid-template-columns: repeat(4, minmax(100px, 1fr));
+        gap: 10px;
+        img{
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 5px solid var(--secondary-color);
+            transition: all 0.2s ease;
+            &.active, &:hover {
+                border-color: var(--accent-color);
+                box-shadow: 0 10px 0 var(--primary-shadow);
+                transform: translateY(-10px);
+            }
+        }
+    }
 }

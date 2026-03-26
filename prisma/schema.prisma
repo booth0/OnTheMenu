@@ -1,10 +1,119 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String           @id @default(uuid())
+  username    String           @unique
+  email       String?          @unique
+  password    String
+  role        Role             @default(USER)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  images      Image[]
+  likes       Like[]
+  flags       ModerationFlag[]
+  recipes     Recipe[]         @relation("author_recipes")
+  recipeBooks RecipeBook[]
+  reviews     Review[]         @relation("author_reviews")
+}
+
+model Recipe {
+  id            String           @id @default(uuid())
+  slug          String           @unique
+  title         String
+  description   String?
+  ingredients   String[]
+  directions    String[]
+  visibility    Visibility       @default(PRIVATE)
+  featuredImage String?
+  authorId      String
+  viewsCount    Int              @default(0)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  images        Image[]
+  likes         Like[]
+  flags         ModerationFlag[]
+  author        User             @relation("author_recipes", fields: [authorId], references: [id])
+  books         RecipeBookItem[]
+  reviews       Review[]
+}
+
+model Review {
+  id        String           @id @default(uuid())
+  recipeId  String
+  authorId  String
+  rating    Int
+  body      String?
+  createdAt DateTime         @default(now())
+  images    Image[]
+  flags     ModerationFlag[]
+  author    User             @relation("author_reviews", fields: [authorId], references: [id])
+  recipe    Recipe           @relation(fields: [recipeId], references: [id])
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  recipeId  String
+  userId    String
+  createdAt DateTime @default(now())
+  recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([recipeId, userId])
+}
+
+model Image {
+  id           String   @id @default(uuid())
+  url          String
+  uploadedById String?
+  recipeId     String?
+  reviewId     String?
+  createdAt    DateTime @default(now())
+  recipe       Recipe?  @relation(fields: [recipeId], references: [id])
+  review       Review?  @relation(fields: [reviewId], references: [id])
+  uploadedBy   User?    @relation(fields: [uploadedById], references: [id])
+}
+
+model RecipeBook {
+  id          String           @id @default(uuid())
+  ownerId     String
+  title       String
+  description String?
+  createdAt   DateTime         @default(now())
+  owner       User             @relation(fields: [ownerId], references: [id])
+  items       RecipeBookItem[]
+}
+
+model RecipeBookItem {
+  id       String     @id @default(uuid())
+  bookId   String
+  recipeId String
+  position Int?
+  addedAt  DateTime   @default(now())
+  book     RecipeBook @relation(fields: [bookId], references: [id])
+  recipe   Recipe     @relation(fields: [recipeId], references: [id])
+
+  @@unique([bookId, recipeId])
+}
+
+model ModerationFlag {
+  id         String     @id @default(uuid())
+  reporterId String
+  recipeId   String?
+  reviewId   String?
+  reason     String
+  status     FlagStatus @default(OPEN)
+  createdAt  DateTime   @default(now())
+  reviewedAt DateTime?
+  recipe     Recipe?    @relation(fields: [recipeId], references: [id])
+  reporter   User       @relation(fields: [reporterId], references: [id])
+  review     Review?    @relation(fields: [reviewId], references: [id])
 }
 
 enum Role {
@@ -22,115 +131,4 @@ enum FlagStatus {
   OPEN
   REVIEWED
   CLOSED
-}
-
-model User {
-  id         String     @id @default(uuid())
-  username   String     @unique
-  email      String?    @unique
-  password   String
-  role       Role       @default(USER)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-
-  recipes    Recipe[]   @relation("author_recipes")
-  reviews    Review[]   @relation("author_reviews")
-  likes      Like[]
-  images     Image[]
-  recipeBooks RecipeBook[]
-  flags      ModerationFlag[]
-}
-
-model Recipe {
-  id            String       @id @default(uuid())
-  slug          String       @unique
-  title         String
-  description   String?
-  body          String       // markdown or rich text
-  visibility    Visibility   @default(PRIVATE)
-  featuredImage String?
-  authorId      String
-  author        User         @relation(fields: [authorId], references: [id], name: "author_recipes")
-
-  reviews       Review[]
-  likes         Like[]
-  images        Image[]
-  books         RecipeBookItem[]
-  flags         ModerationFlag[]
-
-  viewsCount    Int          @default(0)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-}
-
-model Review {
-  id         String    @id @default(uuid())
-  recipeId   String
-  recipe     Recipe    @relation(fields: [recipeId], references: [id])
-  authorId   String
-  author     User      @relation(fields: [authorId], references: [id], name: "author_reviews")
-  rating     Int
-  body       String?
-  images     Image[]
-  flags      ModerationFlag[]
-  createdAt  DateTime  @default(now())
-}
-
-model Like {
-  id        String   @id @default(uuid())
-  recipeId  String
-  recipe    Recipe   @relation(fields: [recipeId], references: [id])
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-
-  @@unique([recipeId, userId])
-}
-
-model Image {
-  id           String   @id @default(uuid())
-  url          String
-  uploadedById String?
-  uploadedBy   User?    @relation(fields: [uploadedById], references: [id])
-  recipeId     String?
-  recipe       Recipe?  @relation(fields: [recipeId], references: [id])
-  reviewId     String?
-  review       Review?  @relation(fields: [reviewId], references: [id])
-  createdAt    DateTime @default(now())
-}
-
-model RecipeBook {
-  id        String              @id @default(uuid())
-  ownerId   String
-  owner     User                @relation(fields: [ownerId], references: [id])
-  title     String
-  description String?
-  items     RecipeBookItem[]
-  createdAt DateTime            @default(now())
-}
-
-model RecipeBookItem {
-  id         String   @id @default(uuid())
-  bookId     String
-  book       RecipeBook @relation(fields: [bookId], references: [id])
-  recipeId   String
-  recipe     Recipe   @relation(fields: [recipeId], references: [id])
-  position   Int?
-  addedAt    DateTime @default(now())
-
-  @@unique([bookId, recipeId])
-}
-
-model ModerationFlag {
-  id         String     @id @default(uuid())
-  reporterId String
-  reporter   User       @relation(fields: [reporterId], references: [id])
-  recipeId   String?
-  recipe     Recipe?    @relation(fields: [recipeId], references: [id])
-  reviewId   String?
-  review     Review?    @relation(fields: [reviewId], references: [id])
-  reason     String
-  status     FlagStatus @default(OPEN)
-  createdAt  DateTime   @default(now())
-  reviewedAt DateTime?
 }

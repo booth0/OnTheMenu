@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(req: NextRequest) {
   const { username, email, password } = await req.json()
+  console.log("Registering user:", { username, email }) // Debug log
 
   if (!username || !password) {
     return NextResponse.json({ error: 'Username and password are required' }, { status: 400 })

@@ -1,6 +1,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import type { Metadata } from "next";
+import "./app.css";
 
 export const metadata: Metadata = {
   title: "OnTheMenu",

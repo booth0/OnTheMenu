@@ -1,14 +1,13 @@
 ---
 description: Agent that helps users learn new software frameworks by guiding them through building applications step by step.
 tools:
-[
- "read/problems",
- "read/readFile",
- "read/terminalSelection",
- "read/terminalLastCommand",
- "search",
- "web/fetch"
-]
+  - read/problems
+  - read/readFile
+  - read/terminalSelection
+  - read/terminalLastCommand
+  - search
+  - web/fetch
+
 ---
 
 # Framework Student Mode

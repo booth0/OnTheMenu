@@ -206,8 +206,8 @@ export type ModerationFlagWhereInput = {
   status?: Prisma.EnumFlagStatusFilter<"ModerationFlag"> | $Enums.FlagStatus
   createdAt?: Prisma.DateTimeFilter<"ModerationFlag"> | Date | string
   reviewedAt?: Prisma.DateTimeNullableFilter<"ModerationFlag"> | Date | string | null
-  reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   recipe?: Prisma.XOR<Prisma.RecipeNullableScalarRelationFilter, Prisma.RecipeWhereInput> | null
+  reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
 }
 
@@ -220,8 +220,8 @@ export type ModerationFlagOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  reporter?: Prisma.UserOrderByWithRelationInput
   recipe?: Prisma.RecipeOrderByWithRelationInput
+  reporter?: Prisma.UserOrderByWithRelationInput
   review?: Prisma.ReviewOrderByWithRelationInput
 }
 
@@ -237,8 +237,8 @@ export type ModerationFlagWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumFlagStatusFilter<"ModerationFlag"> | $Enums.FlagStatus
   createdAt?: Prisma.DateTimeFilter<"ModerationFlag"> | Date | string
   reviewedAt?: Prisma.DateTimeNullableFilter<"ModerationFlag"> | Date | string | null
-  reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   recipe?: Prisma.XOR<Prisma.RecipeNullableScalarRelationFilter, Prisma.RecipeWhereInput> | null
+  reporter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
 }, "id">
 
@@ -276,8 +276,8 @@ export type ModerationFlagCreateInput = {
   status?: $Enums.FlagStatus
   createdAt?: Date | string
   reviewedAt?: Date | string | null
-  reporter: Prisma.UserCreateNestedOneWithoutFlagsInput
   recipe?: Prisma.RecipeCreateNestedOneWithoutFlagsInput
+  reporter: Prisma.UserCreateNestedOneWithoutFlagsInput
   review?: Prisma.ReviewCreateNestedOneWithoutFlagsInput
 }
 
@@ -298,8 +298,8 @@ export type ModerationFlagUpdateInput = {
   status?: Prisma.EnumFlagStatusFieldUpdateOperationsInput | $Enums.FlagStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reporter?: Prisma.UserUpdateOneRequiredWithoutFlagsNestedInput
   recipe?: Prisma.RecipeUpdateOneWithoutFlagsNestedInput
+  reporter?: Prisma.UserUpdateOneRequiredWithoutFlagsNestedInput
   review?: Prisma.ReviewUpdateOneWithoutFlagsNestedInput
 }
 
@@ -633,8 +633,8 @@ export type ModerationFlagCreateWithoutReviewInput = {
   status?: $Enums.FlagStatus
   createdAt?: Date | string
   reviewedAt?: Date | string | null
-  reporter: Prisma.UserCreateNestedOneWithoutFlagsInput
   recipe?: Prisma.RecipeCreateNestedOneWithoutFlagsInput
+  reporter: Prisma.UserCreateNestedOneWithoutFlagsInput
 }
 
 export type ModerationFlagUncheckedCreateWithoutReviewInput = {
@@ -769,8 +769,8 @@ export type ModerationFlagUpdateWithoutReviewInput = {
   status?: Prisma.EnumFlagStatusFieldUpdateOperationsInput | $Enums.FlagStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reporter?: Prisma.UserUpdateOneRequiredWithoutFlagsNestedInput
   recipe?: Prisma.RecipeUpdateOneWithoutFlagsNestedInput
+  reporter?: Prisma.UserUpdateOneRequiredWithoutFlagsNestedInput
 }
 
 export type ModerationFlagUncheckedUpdateWithoutReviewInput = {
@@ -804,8 +804,8 @@ export type ModerationFlagSelect<ExtArgs extends runtime.Types.Extensions.Intern
   status?: boolean
   createdAt?: boolean
   reviewedAt?: boolean
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipe?: boolean | Prisma.ModerationFlag$recipeArgs<ExtArgs>
+  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   review?: boolean | Prisma.ModerationFlag$reviewArgs<ExtArgs>
 }, ExtArgs["result"]["moderationFlag"]>
 
@@ -818,8 +818,8 @@ export type ModerationFlagSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   status?: boolean
   createdAt?: boolean
   reviewedAt?: boolean
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipe?: boolean | Prisma.ModerationFlag$recipeArgs<ExtArgs>
+  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   review?: boolean | Prisma.ModerationFlag$reviewArgs<ExtArgs>
 }, ExtArgs["result"]["moderationFlag"]>
 
@@ -832,8 +832,8 @@ export type ModerationFlagSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   status?: boolean
   createdAt?: boolean
   reviewedAt?: boolean
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipe?: boolean | Prisma.ModerationFlag$recipeArgs<ExtArgs>
+  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   review?: boolean | Prisma.ModerationFlag$reviewArgs<ExtArgs>
 }, ExtArgs["result"]["moderationFlag"]>
 
@@ -850,26 +850,26 @@ export type ModerationFlagSelectScalar = {
 
 export type ModerationFlagOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "reporterId" | "recipeId" | "reviewId" | "reason" | "status" | "createdAt" | "reviewedAt", ExtArgs["result"]["moderationFlag"]>
 export type ModerationFlagInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipe?: boolean | Prisma.ModerationFlag$recipeArgs<ExtArgs>
+  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   review?: boolean | Prisma.ModerationFlag$reviewArgs<ExtArgs>
 }
 export type ModerationFlagIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipe?: boolean | Prisma.ModerationFlag$recipeArgs<ExtArgs>
+  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   review?: boolean | Prisma.ModerationFlag$reviewArgs<ExtArgs>
 }
 export type ModerationFlagIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   recipe?: boolean | Prisma.ModerationFlag$recipeArgs<ExtArgs>
+  reporter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   review?: boolean | Prisma.ModerationFlag$reviewArgs<ExtArgs>
 }
 
 export type $ModerationFlagPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ModerationFlag"
   objects: {
-    reporter: Prisma.$UserPayload<ExtArgs>
     recipe: Prisma.$RecipePayload<ExtArgs> | null
+    reporter: Prisma.$UserPayload<ExtArgs>
     review: Prisma.$ReviewPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1275,8 +1275,8 @@ readonly fields: ModerationFlagFieldRefs;
  */
 export interface Prisma__ModerationFlagClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  reporter<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   recipe<T extends Prisma.ModerationFlag$recipeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ModerationFlag$recipeArgs<ExtArgs>>): Prisma.Prisma__RecipeClient<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  reporter<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   review<T extends Prisma.ModerationFlag$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ModerationFlag$reviewArgs<ExtArgs>>): Prisma.Prisma__ReviewClient<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

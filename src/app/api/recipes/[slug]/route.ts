@@ -50,7 +50,7 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
             title: legacyRecipe.title,
             description: legacyRecipe.description,
             visibility: legacyRecipe.visibility,
-            featuredImageUrl: legacyRecipe.featuredImage,
+            featuredImage: legacyRecipe.featuredImage,
             authorId: legacyRecipe.authorId,
             ingredients: [],
             directions: legacyRecipe.body
@@ -64,8 +64,9 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
 }
 
 export async function PUT(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = await params;
+    const { slug } = params;
     const body = await req.json();
+    const featuredImage = body?.featuredImage ?? body?.featuredImageUrl ?? null;
     // Check ownership or permissions here (not implemented)
     try {
         const updated = await prisma.recipe.update({
@@ -74,7 +75,7 @@ export async function PUT(req: Request, { params }: { params: { slug: string } }
                 title: body.title,
                 description: body.description ?? null,
                 visibility: body.visibility ?? "PRIVATE",
-                featuredImageUrl: body.featuredImageUrl ?? null,
+                featuredImage,
                 ingredients: body.ingredients,
                 directions: body.directions
             }

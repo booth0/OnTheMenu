@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 
 type RecipeResponse = {
     title: string;
-    featuredImageUrl: string | null;
+    featuredImage: string | null;
     rating?: number;
     likes?: number;
     saves?: number;
@@ -139,7 +139,7 @@ export default function RecipePage() {
     }
 
     const title = recipe.title;
-    const featuredImageUrl = recipe.featuredImageUrl;
+    const featuredImage = recipe.featuredImage;
     const rating = recipe.rating ?? 0;
     const likes = recipe.likes ?? 0;
     const saves = recipe.saves ?? 0;
@@ -232,9 +232,9 @@ export default function RecipePage() {
                         </div>
                     </h4>
                 </div>
-                <div className="card">
-                    <ImageViewer title={title} featuredImageUrl={featuredImageUrl ?? ""} images={featuredImageUrl ? [featuredImageUrl] : []} />
-                </div>
+                {featuredImage && <div className="card">
+                    <ImageViewer title={title} featuredImageUrl={featuredImage ?? ""} images={featuredImage ? [featuredImage] : []} />
+                </div>}
                 <div className="card light">
                     <h2>Ingredients - <span>{ingredients.length}</span></h2>
                     <ul>

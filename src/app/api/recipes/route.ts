@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/slug";
-import { Prisma, Visibility } from "@prisma/client";
+import { getAuthUser } from "@/lib/auth";
 
 export async function GET(req: Request) {
     const url = new URL(req.url);
@@ -14,7 +14,7 @@ export async function GET(req: Request) {
         take,
         skip,
         select: {
-            id: true, title: true, slug: true, description: true, featuredImageUrl: true, createdAt: true
+            id: true, title: true, slug: true, description: true, featuredImage: true, createdAt: true
         }
     });
     return NextResponse.json(recipes);
@@ -23,13 +23,34 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        console.log("Received recipe data:", body); // Debug log
-        if (!body.title) {
-            return NextResponse.json({error: "Title is required"}, {status: 400});
+        const featuredImage = body?.featuredImage ?? body?.featuredImageUrl ?? null;
+        console.log("Received recipe data:", {
+            title: body?.title,
+            visibility: body?.visibility,
+            ingredientsCount: Array.isArray(body?.ingredients) ? body.ingredients.length : null,
+            directionsCount: Array.isArray(body?.directions) ? body.directions.length : null,
+            hasFeaturedImage: !!featuredImage,
+        });
+
+        const authUser = await getAuthUser();
+
+        if (!authUser) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+
+        if (!body?.title) {
+            return NextResponse.json({ error: "Title is required" }, { status: 400 });
+        }
+
         if (!Array.isArray(body.ingredients) || !Array.isArray(body.directions)) {
-            return new NextResponse('Ingredients and directions must be arrays', {status: 400});
+            return NextResponse.json({ error: "Ingredients and directions must be arrays" }, { status: 400 });
         }
+
+        if (body.ingredients.length === 0 || body.directions.length === 0) {
+            return NextResponse.json({ error: "Ingredients and directions cannot be empty" }, { status: 400 });
+        }
+
+        const visibility = body.visibility === "PUBLIC" ? "PUBLIC" : "PRIVATE";
 
         let baseSlug = slugify(body.title);
         let slug = baseSlug;
@@ -42,11 +63,11 @@ export async function POST(req: Request) {
                         title: body.title,
                         slug,
                         description: body.description ?? null,
-                        visibility: body.visibility ?? "PRIVATE",
-                        featuredImageUrl: body.featuredImageUrl ?? null,
+                        visibility,
+                        featuredImage,
                         ingredients: body.ingredients,
                         directions: body.directions,
-                        authorId: body.authorId
+                        authorId: authUser.id,
                     }
                 })
                 return NextResponse.json(created, {status: 201});
@@ -57,10 +78,25 @@ export async function POST(req: Request) {
                     slug = `${baseSlug}-${tries}`;
                     continue;
                 }
+
+                console.error("Recipe create failed:", {
+                    code: err?.code,
+                    message: err?.message,
+                    meta: err?.meta,
+                    authUserId: authUser.id,
+                });
+
                 throw err;
             }
         }
     } catch (err: any) {
-        return NextResponse.json({ error: err.message ?? 'Internal server error' }, { status: 500 });
+        return NextResponse.json(
+            {
+                error: err?.message ?? 'Internal server error',
+                code: err?.code ?? null,
+                meta: err?.meta ?? null,
+            },
+            { status: 500 }
+        );
     }
 }

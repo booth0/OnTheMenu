@@ -1063,7 +1063,7 @@ export const RecipeScalarFieldEnum = {
   ingredients: 'ingredients',
   directions: 'directions',
   visibility: 'visibility',
-  featuredImageUrl: 'featuredImageUrl',
+  featuredImage: 'featuredImage',
   authorId: 'authorId',
   viewsCount: 'viewsCount',
   createdAt: 'createdAt',

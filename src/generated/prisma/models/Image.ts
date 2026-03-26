@@ -190,9 +190,9 @@ export type ImageWhereInput = {
   recipeId?: Prisma.StringNullableFilter<"Image"> | string | null
   reviewId?: Prisma.StringNullableFilter<"Image"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
-  uploadedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   recipe?: Prisma.XOR<Prisma.RecipeNullableScalarRelationFilter, Prisma.RecipeWhereInput> | null
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  uploadedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type ImageOrderByWithRelationInput = {
@@ -202,9 +202,9 @@ export type ImageOrderByWithRelationInput = {
   recipeId?: Prisma.SortOrderInput | Prisma.SortOrder
   reviewId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  uploadedBy?: Prisma.UserOrderByWithRelationInput
   recipe?: Prisma.RecipeOrderByWithRelationInput
   review?: Prisma.ReviewOrderByWithRelationInput
+  uploadedBy?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ImageWhereUniqueInput = Prisma.AtLeast<{
@@ -217,9 +217,9 @@ export type ImageWhereUniqueInput = Prisma.AtLeast<{
   recipeId?: Prisma.StringNullableFilter<"Image"> | string | null
   reviewId?: Prisma.StringNullableFilter<"Image"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
-  uploadedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   recipe?: Prisma.XOR<Prisma.RecipeNullableScalarRelationFilter, Prisma.RecipeWhereInput> | null
   review?: Prisma.XOR<Prisma.ReviewNullableScalarRelationFilter, Prisma.ReviewWhereInput> | null
+  uploadedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type ImageOrderByWithAggregationInput = {
@@ -250,9 +250,9 @@ export type ImageCreateInput = {
   id?: string
   url: string
   createdAt?: Date | string
-  uploadedBy?: Prisma.UserCreateNestedOneWithoutImagesInput
   recipe?: Prisma.RecipeCreateNestedOneWithoutImagesInput
   review?: Prisma.ReviewCreateNestedOneWithoutImagesInput
+  uploadedBy?: Prisma.UserCreateNestedOneWithoutImagesInput
 }
 
 export type ImageUncheckedCreateInput = {
@@ -268,9 +268,9 @@ export type ImageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  uploadedBy?: Prisma.UserUpdateOneWithoutImagesNestedInput
   recipe?: Prisma.RecipeUpdateOneWithoutImagesNestedInput
   review?: Prisma.ReviewUpdateOneWithoutImagesNestedInput
+  uploadedBy?: Prisma.UserUpdateOneWithoutImagesNestedInput
 }
 
 export type ImageUncheckedUpdateInput = {
@@ -527,8 +527,8 @@ export type ImageCreateWithoutRecipeInput = {
   id?: string
   url: string
   createdAt?: Date | string
-  uploadedBy?: Prisma.UserCreateNestedOneWithoutImagesInput
   review?: Prisma.ReviewCreateNestedOneWithoutImagesInput
+  uploadedBy?: Prisma.UserCreateNestedOneWithoutImagesInput
 }
 
 export type ImageUncheckedCreateWithoutRecipeInput = {
@@ -569,8 +569,8 @@ export type ImageCreateWithoutReviewInput = {
   id?: string
   url: string
   createdAt?: Date | string
-  uploadedBy?: Prisma.UserCreateNestedOneWithoutImagesInput
   recipe?: Prisma.RecipeCreateNestedOneWithoutImagesInput
+  uploadedBy?: Prisma.UserCreateNestedOneWithoutImagesInput
 }
 
 export type ImageUncheckedCreateWithoutReviewInput = {
@@ -651,8 +651,8 @@ export type ImageUpdateWithoutRecipeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  uploadedBy?: Prisma.UserUpdateOneWithoutImagesNestedInput
   review?: Prisma.ReviewUpdateOneWithoutImagesNestedInput
+  uploadedBy?: Prisma.UserUpdateOneWithoutImagesNestedInput
 }
 
 export type ImageUncheckedUpdateWithoutRecipeInput = {
@@ -683,8 +683,8 @@ export type ImageUpdateWithoutReviewInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  uploadedBy?: Prisma.UserUpdateOneWithoutImagesNestedInput
   recipe?: Prisma.RecipeUpdateOneWithoutImagesNestedInput
+  uploadedBy?: Prisma.UserUpdateOneWithoutImagesNestedInput
 }
 
 export type ImageUncheckedUpdateWithoutReviewInput = {
@@ -712,9 +712,9 @@ export type ImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   recipeId?: boolean
   reviewId?: boolean
   createdAt?: boolean
-  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
   recipe?: boolean | Prisma.Image$recipeArgs<ExtArgs>
   review?: boolean | Prisma.Image$reviewArgs<ExtArgs>
+  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -724,9 +724,9 @@ export type ImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   recipeId?: boolean
   reviewId?: boolean
   createdAt?: boolean
-  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
   recipe?: boolean | Prisma.Image$recipeArgs<ExtArgs>
   review?: boolean | Prisma.Image$reviewArgs<ExtArgs>
+  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -736,9 +736,9 @@ export type ImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   recipeId?: boolean
   reviewId?: boolean
   createdAt?: boolean
-  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
   recipe?: boolean | Prisma.Image$recipeArgs<ExtArgs>
   review?: boolean | Prisma.Image$reviewArgs<ExtArgs>
+  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectScalar = {
@@ -752,27 +752,27 @@ export type ImageSelectScalar = {
 
 export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "url" | "uploadedById" | "recipeId" | "reviewId" | "createdAt", ExtArgs["result"]["image"]>
 export type ImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
   recipe?: boolean | Prisma.Image$recipeArgs<ExtArgs>
   review?: boolean | Prisma.Image$reviewArgs<ExtArgs>
+  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
 }
 export type ImageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
   recipe?: boolean | Prisma.Image$recipeArgs<ExtArgs>
   review?: boolean | Prisma.Image$reviewArgs<ExtArgs>
+  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
 }
 export type ImageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
   recipe?: boolean | Prisma.Image$recipeArgs<ExtArgs>
   review?: boolean | Prisma.Image$reviewArgs<ExtArgs>
+  uploadedBy?: boolean | Prisma.Image$uploadedByArgs<ExtArgs>
 }
 
 export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Image"
   objects: {
-    uploadedBy: Prisma.$UserPayload<ExtArgs> | null
     recipe: Prisma.$RecipePayload<ExtArgs> | null
     review: Prisma.$ReviewPayload<ExtArgs> | null
+    uploadedBy: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1175,9 +1175,9 @@ readonly fields: ImageFieldRefs;
  */
 export interface Prisma__ImageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  uploadedBy<T extends Prisma.Image$uploadedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Image$uploadedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   recipe<T extends Prisma.Image$recipeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Image$recipeArgs<ExtArgs>>): Prisma.Prisma__RecipeClient<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   review<T extends Prisma.Image$reviewArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Image$reviewArgs<ExtArgs>>): Prisma.Prisma__ReviewClient<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  uploadedBy<T extends Prisma.Image$uploadedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Image$uploadedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1614,25 +1614,6 @@ export type ImageDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Image.uploadedBy
- */
-export type Image$uploadedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-}
-
-/**
  * Image.recipe
  */
 export type Image$recipeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1668,6 +1649,25 @@ export type Image$reviewArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.ReviewInclude<ExtArgs> | null
   where?: Prisma.ReviewWhereInput
+}
+
+/**
+ * Image.uploadedBy
+ */
+export type Image$uploadedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

@@ -224,10 +224,10 @@ export type ReviewWhereInput = {
   rating?: Prisma.IntFilter<"Review"> | number
   body?: Prisma.StringNullableFilter<"Review"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  recipe?: Prisma.XOR<Prisma.RecipeScalarRelationFilter, Prisma.RecipeWhereInput>
-  author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   images?: Prisma.ImageListRelationFilter
   flags?: Prisma.ModerationFlagListRelationFilter
+  author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  recipe?: Prisma.XOR<Prisma.RecipeScalarRelationFilter, Prisma.RecipeWhereInput>
 }
 
 export type ReviewOrderByWithRelationInput = {
@@ -237,10 +237,10 @@ export type ReviewOrderByWithRelationInput = {
   rating?: Prisma.SortOrder
   body?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  recipe?: Prisma.RecipeOrderByWithRelationInput
-  author?: Prisma.UserOrderByWithRelationInput
   images?: Prisma.ImageOrderByRelationAggregateInput
   flags?: Prisma.ModerationFlagOrderByRelationAggregateInput
+  author?: Prisma.UserOrderByWithRelationInput
+  recipe?: Prisma.RecipeOrderByWithRelationInput
 }
 
 export type ReviewWhereUniqueInput = Prisma.AtLeast<{
@@ -253,10 +253,10 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   rating?: Prisma.IntFilter<"Review"> | number
   body?: Prisma.StringNullableFilter<"Review"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  recipe?: Prisma.XOR<Prisma.RecipeScalarRelationFilter, Prisma.RecipeWhereInput>
-  author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   images?: Prisma.ImageListRelationFilter
   flags?: Prisma.ModerationFlagListRelationFilter
+  author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  recipe?: Prisma.XOR<Prisma.RecipeScalarRelationFilter, Prisma.RecipeWhereInput>
 }, "id">
 
 export type ReviewOrderByWithAggregationInput = {
@@ -290,10 +290,10 @@ export type ReviewCreateInput = {
   rating: number
   body?: string | null
   createdAt?: Date | string
-  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
-  author: Prisma.UserCreateNestedOneWithoutReviewsInput
   images?: Prisma.ImageCreateNestedManyWithoutReviewInput
   flags?: Prisma.ModerationFlagCreateNestedManyWithoutReviewInput
+  author: Prisma.UserCreateNestedOneWithoutReviewsInput
+  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
 }
 
 export type ReviewUncheckedCreateInput = {
@@ -312,10 +312,10 @@ export type ReviewUpdateInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
-  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   images?: Prisma.ImageUpdateManyWithoutReviewNestedInput
   flags?: Prisma.ModerationFlagUpdateManyWithoutReviewNestedInput
+  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 export type ReviewUncheckedUpdateInput = {
@@ -525,9 +525,9 @@ export type ReviewCreateWithoutAuthorInput = {
   rating: number
   body?: string | null
   createdAt?: Date | string
-  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
   images?: Prisma.ImageCreateNestedManyWithoutReviewInput
   flags?: Prisma.ModerationFlagCreateNestedManyWithoutReviewInput
+  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
 }
 
 export type ReviewUncheckedCreateWithoutAuthorInput = {
@@ -583,9 +583,9 @@ export type ReviewCreateWithoutRecipeInput = {
   rating: number
   body?: string | null
   createdAt?: Date | string
-  author: Prisma.UserCreateNestedOneWithoutReviewsInput
   images?: Prisma.ImageCreateNestedManyWithoutReviewInput
   flags?: Prisma.ModerationFlagCreateNestedManyWithoutReviewInput
+  author: Prisma.UserCreateNestedOneWithoutReviewsInput
 }
 
 export type ReviewUncheckedCreateWithoutRecipeInput = {
@@ -629,9 +629,9 @@ export type ReviewCreateWithoutImagesInput = {
   rating: number
   body?: string | null
   createdAt?: Date | string
-  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
-  author: Prisma.UserCreateNestedOneWithoutReviewsInput
   flags?: Prisma.ModerationFlagCreateNestedManyWithoutReviewInput
+  author: Prisma.UserCreateNestedOneWithoutReviewsInput
+  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
 }
 
 export type ReviewUncheckedCreateWithoutImagesInput = {
@@ -665,9 +665,9 @@ export type ReviewUpdateWithoutImagesInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
-  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   flags?: Prisma.ModerationFlagUpdateManyWithoutReviewNestedInput
+  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutImagesInput = {
@@ -685,9 +685,9 @@ export type ReviewCreateWithoutFlagsInput = {
   rating: number
   body?: string | null
   createdAt?: Date | string
-  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
-  author: Prisma.UserCreateNestedOneWithoutReviewsInput
   images?: Prisma.ImageCreateNestedManyWithoutReviewInput
+  author: Prisma.UserCreateNestedOneWithoutReviewsInput
+  recipe: Prisma.RecipeCreateNestedOneWithoutReviewsInput
 }
 
 export type ReviewUncheckedCreateWithoutFlagsInput = {
@@ -721,9 +721,9 @@ export type ReviewUpdateWithoutFlagsInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
-  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   images?: Prisma.ImageUpdateManyWithoutReviewNestedInput
+  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutFlagsInput = {
@@ -749,9 +749,9 @@ export type ReviewUpdateWithoutAuthorInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
   images?: Prisma.ImageUpdateManyWithoutReviewNestedInput
   flags?: Prisma.ModerationFlagUpdateManyWithoutReviewNestedInput
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutAuthorInput = {
@@ -785,9 +785,9 @@ export type ReviewUpdateWithoutRecipeInput = {
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   body?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
   images?: Prisma.ImageUpdateManyWithoutReviewNestedInput
   flags?: Prisma.ModerationFlagUpdateManyWithoutReviewNestedInput
+  author?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 export type ReviewUncheckedUpdateWithoutRecipeInput = {
@@ -855,10 +855,10 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   rating?: boolean
   body?: boolean
   createdAt?: boolean
-  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
-  author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   images?: boolean | Prisma.Review$imagesArgs<ExtArgs>
   flags?: boolean | Prisma.Review$flagsArgs<ExtArgs>
+  author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ReviewCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
@@ -869,8 +869,8 @@ export type ReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   rating?: boolean
   body?: boolean
   createdAt?: boolean
-  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
 export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -880,8 +880,8 @@ export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   rating?: boolean
   body?: boolean
   createdAt?: boolean
-  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
 export type ReviewSelectScalar = {
@@ -895,28 +895,28 @@ export type ReviewSelectScalar = {
 
 export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "recipeId" | "authorId" | "rating" | "body" | "createdAt", ExtArgs["result"]["review"]>
 export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
-  author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   images?: boolean | Prisma.Review$imagesArgs<ExtArgs>
   flags?: boolean | Prisma.Review$flagsArgs<ExtArgs>
+  author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ReviewCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ReviewIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
 }
 export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
 }
 
 export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Review"
   objects: {
-    recipe: Prisma.$RecipePayload<ExtArgs>
-    author: Prisma.$UserPayload<ExtArgs>
     images: Prisma.$ImagePayload<ExtArgs>[]
     flags: Prisma.$ModerationFlagPayload<ExtArgs>[]
+    author: Prisma.$UserPayload<ExtArgs>
+    recipe: Prisma.$RecipePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1319,10 +1319,10 @@ readonly fields: ReviewFieldRefs;
  */
 export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  recipe<T extends Prisma.RecipeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RecipeDefaultArgs<ExtArgs>>): Prisma.Prisma__RecipeClient<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   images<T extends Prisma.Review$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Review$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   flags<T extends Prisma.Review$flagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Review$flagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModerationFlagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  recipe<T extends Prisma.RecipeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RecipeDefaultArgs<ExtArgs>>): Prisma.Prisma__RecipeClient<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

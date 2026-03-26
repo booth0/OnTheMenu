@@ -69,7 +69,7 @@ export default function EditRecipePage() {
           ingredients: Array.isArray(data.ingredients) ? data.ingredients.join("\n") : "",
           directions: Array.isArray(data.directions) ? data.directions.join("\n") : "",
           visibility: data.visibility === "PUBLIC" ? "PUBLIC" : "PRIVATE",
-          featuredImageUrl: data.featuredImageUrl ?? null,
+          featuredImageUrl: data.featuredImageUrl ?? data.featuredImage ?? null,
           authorId: data.authorId,
         });
       } catch (err) {

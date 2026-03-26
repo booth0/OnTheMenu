@@ -8,7 +8,7 @@ export default function NewRecipePage() {
     const [uploadingImage, setUploadingImage] = useState(false);
     
       useEffect(() => {
-        setLoggedIn(!!localStorage.getItem('sessionId'))
+                setLoggedIn(document.cookie.split(';').some(c => c.trim().startsWith('loggedIn=')))
       }, [])
       
     let recipe = {
@@ -17,49 +17,43 @@ export default function NewRecipePage() {
         ingredients: [] as string[],
         directions: [] as string[],
         visibility: "PRIVATE",
-        authorId: undefined as string | undefined,
         featuredImageUrl: null as string | null
     };
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSubmitting(true);
-        let featuredImageUrl: string | null = null;
-        const formData = new FormData(e.currentTarget);
+        try {
+            let featuredImageUrl: string | null = null;
+            const formData = new FormData(e.currentTarget);
 
-        const imageFile = formData.get("featuredImage") as File;
-        if (imageFile && imageFile.size > 0) {
-            setUploadingImage(true);
-            const imageForm = new FormData();
-            imageForm.append("file", imageFile);
+            const imageFile = formData.get("featuredImage") as File;
+            if (imageFile && imageFile.size > 0) {
+                setUploadingImage(true);
+                const imageForm = new FormData();
+                imageForm.append("file", imageFile);
 
-            const uploadRedsponse = await fetch("/api/uploads/cloudinary", {
-                method: "POST",
-                body: imageForm
-            });
+                const uploadResponse = await fetch("/api/uploads/cloudinary", {
+                    method: "POST",
+                    body: imageForm
+                });
 
-            const uploadJson = await uploadRedsponse.json();
-            setUploadingImage(false);
+                const uploadJson = await uploadResponse.json();
 
-            if (!uploadRedsponse.ok) {
-                throw new Error(uploadJson.error || "Image upload failed");
+                if (!uploadResponse.ok) {
+                    throw new Error(uploadJson.error || "Image upload failed");
+                }
+
+                featuredImageUrl = uploadJson.url;
             }
 
-            featuredImageUrl = uploadJson.url;
-        }
+            recipe.title = formData.get("title") as string;
+            recipe.description = formData.get("description") as string;
+            recipe.visibility = (formData.get("visibility") as string).toUpperCase();
+            recipe.ingredients = (formData.get("ingredients") as string).split("\n").map(line => line.trim()).filter(line => line);
+            recipe.directions = (formData.get("directions") as string).split("\n").map(line => line.trim()).filter(line => line);
+            recipe.featuredImageUrl = featuredImageUrl;
 
-        const userInfo = await fetch("/api/users/me").then(res => res.json()).catch(() => null);
-        if (userInfo?.id) {
-            recipe.authorId = userInfo.id;
-        }
-
-        recipe.title = formData.get("title") as string;
-        recipe.description = formData.get("description") as string;
-        recipe.visibility = (formData.get("visibility") as string).toUpperCase();
-        recipe.ingredients = (formData.get("ingredients") as string).split("\n").map(line => line.trim()).filter(line => line);
-        recipe.directions = (formData.get("directions") as string).split("\n").map(line => line.trim()).filter(line => line);
-        recipe.featuredImageUrl = featuredImageUrl;
-        try {
             console.log("Submitting recipe:", recipe); // Debug log
             const res = await fetch("/api/recipes", {
                 method: "POST",
@@ -68,16 +62,25 @@ export default function NewRecipePage() {
                 },
                 body: JSON.stringify(recipe)
             });
+
+            let payload: any = null;
+            try {
+                payload = await res.json();
+            } catch {
+                payload = null;
+            }
+
             if (res.ok) {
-                const data = await res.json();
-                window.location.href = `/recipe/${data.slug}`;
+                window.location.href = `/recipe/${payload.slug}`;
             } else {
-                const error = await res.json();
-                alert(`Error: ${error.error}`);
+                alert(`Error: ${payload?.error ?? `Request failed with status ${res.status}`}`);
             }
         } catch (err) {
             console.error("Error submitting recipe:", err); // Debug log
             alert(`Error: ${err instanceof Error ? err.message : "Unknown error"}`);
+        } finally {
+            setSubmitting(false);
+            setUploadingImage(false);
         }
     };
 

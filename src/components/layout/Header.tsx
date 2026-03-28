@@ -22,13 +22,62 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
 
   return (
     <header>
+      <style>
+        {`
+          header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 1rem 2rem;
+              background-color: var(--secondary-color);
+              color: white;
+              position: sticky;
+              box-shadow: 0 5px 0 var(--secondary-shadow);
+              .logo{
+                  font-size: 1.5rem;
+                  font-weight: bold;
+                  color: white;
+                  text-decoration: none;
+              }
+              .search{
+                  display: flex;
+                  gap: 0.5em;
+                  input[type="text"] {
+                      padding: 0.5rem;
+                      border: none;
+                      border-radius: 5px;
+                      width: 200px;
+                  }
+              }
+              #toggle{
+                  anchor-name: --toggle;
+                }
+              nav{
+                  position-anchor: --toggle;
+                  position: absolute;
+                  position-area: left bottom;
+                  display: flex;
+                  flex-direction: column;
+                  background: var(--accent-color);
+                  padding: 1em;
+                  border-radius: 5px;
+                  box-shadow: 0 5px 0 var(--accent-shadow);
+                  a{
+                      color: white;
+                      text-decoration: none;
+                      padding: 0.2em;
+                      }
+              }
+          }
+          `}
+      </style>
       {/* LEFT — Logo */}
-      <Link href="/">
+      <Link href="/" className='logo'>
         <span>OnTheMenu</span>
       </Link>
 
       {/* CENTER — Search */}
-      <form onSubmit={handleSearch}>
+      <form onSubmit={handleSearch} className='search'>
         <input
           type="text"
           placeholder="Search recipes..."
@@ -40,7 +89,7 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
 
       {/* RIGHT — Hamburger */}
       <div>
-        <button onClick={() => setMenuOpen((prev) => !prev)} aria-label="Toggle menu">
+        <button onClick={() => setMenuOpen((prev) => !prev)} aria-label="Toggle menu" id='toggle'>
           ☰
         </button>
 

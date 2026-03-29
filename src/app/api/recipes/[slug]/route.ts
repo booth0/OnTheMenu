@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = params;
+export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
     console.log("Fetching recipe with slug:", slug);
 
     try {
@@ -63,8 +63,8 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
     }
 }
 
-export async function PUT(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = params;
+export async function PUT(req: Request, { params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
     const body = await req.json();
     const featuredImage = body?.featuredImage ?? body?.featuredImageUrl ?? null;
     // Check ownership or permissions here (not implemented)
@@ -86,7 +86,7 @@ export async function PUT(req: Request, { params }: { params: { slug: string } }
     }
 }
 
-export async function DELETE(req: Request, { params }: { params: { slug: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     // Check ownership or permissions here (not implemented)
     try {

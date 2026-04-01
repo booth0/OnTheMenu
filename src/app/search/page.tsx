@@ -1,14 +1,22 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState, useMemo, Suspense } from 'react'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
+import RecipeSortSelect, { type SortOption, sortRecipes } from '@/components/recipe/RecipeSortSelect'
 
 function SearchResults() {
   const searchParams = useSearchParams()
   const query = searchParams.get('query') ?? ''
 
   const [recipes, setRecipes] = useState<RecipeCardRecipe[]>([])
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const [sort, setSort] = useState<SortOption>('newest')
+  const sorted = useMemo(() => sortRecipes(recipes, sort), [recipes, sort])
+
+  useEffect(() => {
+    fetch('/api/users/me').then(r => r.ok ? r.json() : null).then(u => setCurrentUserId(u?.id ?? null)).catch(() => {})
+  }, [])
 
   useEffect(() => {
     if (!query) {
@@ -51,9 +59,11 @@ function SearchResults() {
         <p>Enter a search term to find recipes.</p>
       )}
 
+      {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
+
       <div>
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
+        {sorted.map((recipe) => (
+          <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
         ))}
       </div>
     </main>

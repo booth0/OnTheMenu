@@ -192,7 +192,7 @@ export type RecipeBookItemGroupByOutputType = {
   _max: RecipeBookItemMaxAggregateOutputType | null
 }
 
-type GetRecipeBookItemGroupByPayload<T extends RecipeBookItemGroupByArgs> = Prisma.PrismaPromise<
+export type GetRecipeBookItemGroupByPayload<T extends RecipeBookItemGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RecipeBookItemGroupByOutputType, T['by']> &
       {

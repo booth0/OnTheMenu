@@ -1,12 +1,13 @@
 "use client"
-import { Star, ThumbsUp, Bookmark } from "lucide-react";
+import { Star, ThumbsUp, Bookmark, BookPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
 import ImageViewer from "@/components/ui/imageViewer";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 
 type RecipeResponse = {
+    id: string;
     title: string;
     featuredImage: string | null;
     rating?: number;
@@ -23,6 +24,11 @@ type RecipeResponse = {
 type UserResponse = {
     id: string;
     username: string;
+}
+
+type RecipeBookOption = {
+    id: string;
+    title: string;
 }
 
 async function getAuthorName(authorId: string | null | undefined) {
@@ -42,6 +48,7 @@ async function getAuthorName(authorId: string | null | undefined) {
 export default function RecipePage() {
     const params = useParams<{ slug: string }>();
     const slug = params.slug;
+    const router = useRouter();
 
     const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
     const [authorName, setAuthorName] = useState<string>("Unknown Author");
@@ -49,6 +56,9 @@ export default function RecipePage() {
     const [error, setError] = useState<string | null>(null);
     const [likedByUser, setLikedByUser] = useState(false);
     const [savedByUser, setSavedByUser] = useState(false);
+    const [bookMenuOpen, setBookMenuOpen] = useState(false);
+    const [books, setBooks] = useState<RecipeBookOption[]>([]);
+    const [bookMessage, setBookMessage] = useState<string | null>(null);
 
     useEffect(() => {
         if (!slug) {
@@ -113,6 +123,34 @@ export default function RecipePage() {
         };
     }, [recipe?.authorId]);
 
+    async function toggleBookMenu() {
+        if (!bookMenuOpen) {
+            const res = await fetch('/api/recipe-books');
+            if (res.ok) {
+                const data = await res.json();
+                setBooks(data);
+            }
+        }
+        setBookMessage(null);
+        setBookMenuOpen(!bookMenuOpen);
+    }
+
+    async function addToBook(bookId: string) {
+        if (!recipe) return;
+        const res = await fetch('/api/recipe-books/items', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bookId, recipeId: (recipe as any).id }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setBookMessage('Added!');
+            setTimeout(() => { setBookMenuOpen(false); setBookMessage(null); }, 1200);
+        } else {
+            setBookMessage(data.error ?? 'Failed to add');
+        }
+    }
+
     if (loading) {
         return (
             <main>
@@ -171,6 +209,36 @@ export default function RecipePage() {
                     .buttons{
                         display: flex;
                         gap: 1em;
+                        position: relative;
+                    }
+                    .book-dropdown{
+                        position: absolute;
+                        top: 100%;
+                        right: 0;
+                        background: white;
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 0.5em;
+                        min-width: 200px;
+                        z-index: 10;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.25em;
+                    }
+                    .book-dropdown button{
+                        display: block;
+                        width: 100%;
+                        text-align: left;
+                        padding: 0.4em 0.6em;
+                        border: none;
+                        background: none;
+                        cursor: pointer;
+                        border-radius: 4px;
+                    }
+                    .book-dropdown button:hover{
+                        background: var(--primary-color);
+                        color: white;
                     }
                     .overview{
                         display: grid;
@@ -214,6 +282,17 @@ export default function RecipePage() {
                         <div className="buttons">
                             <Button onClick={() => setLikedByUser(!likedByUser)} type="primary"><ThumbsUp fill={likedByUser ? "currentColor" : "none"} size={"1em"} /> {likedByUser ? "Unlike Recipe" : "Like Recipe"}</Button>
                             <Button onClick={() => setSavedByUser(!savedByUser)} type="secondary"><Bookmark fill={savedByUser ? "currentColor" : "none"} size={"1em"} /> {savedByUser ? "Unsave Recipe" : "Save Recipe"}</Button>
+                            <Button onClick={toggleBookMenu} type="secondary"><BookPlus size={"1em"} /> Add to Book</Button>
+                            {bookMenuOpen && (
+                                <div className="book-dropdown">
+                                    {bookMessage && <p style={{ margin: 0, padding: '0.3em 0.6em', fontWeight: 'bold' }}>{bookMessage}</p>}
+                                    {!bookMessage && books.length > 0 && books.map((b) => (
+                                        <button key={b.id} onClick={() => addToBook(b.id)}>{b.title}</button>
+                                    ))}
+                                    {!bookMessage && books.length === 0 && <p style={{ margin: 0, padding: '0.3em 0.6em' }}>No recipe books yet</p>}
+                                    {!bookMessage && <button onClick={() => router.push('/recipe-books/new')} style={{ borderTop: '1px solid #eee', fontWeight: 'bold' }}>+ Create New Book</button>}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <h4 className="metrics">

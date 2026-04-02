@@ -22,9 +22,10 @@ export type RecipeCardRecipe = {
 
 interface RecipeCardProps {
 	recipe: RecipeCardRecipe;
+	currentUserId?: string | null;
 }
 
-export default function RecipeCard({ recipe }: RecipeCardProps) {
+export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 	const {
 		slug,
 		title,
@@ -36,6 +37,9 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 		likesCount,
 		reviewsCount,
 	} = recipe;
+
+	const isOwner = currentUserId != null && author?.id === currentUserId;
+	const href = isOwner ? `/recipe/edit/${slug}` : `/recipe/${slug}`;
 
 	return (
 		<article className="card">
@@ -58,7 +62,7 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 			)}
 
 			<h3>
-				<Link href={`/recipe/${slug}`} className="title">{title}</Link>
+				<Link href={href} className="title">{title}</Link>
 			</h3>
 
 			{description && <p>{description}</p>}

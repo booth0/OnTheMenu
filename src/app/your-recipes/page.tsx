@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
+import Link from 'next/link'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
 import RecipeSortSelect, { type SortOption, sortRecipes } from '@/components/recipe/RecipeSortSelect'
 
-export default function RecipesPage() {
+export default function YourRecipesPage() {
   const [recipes, setRecipes] = useState<RecipeCardRecipe[]>([])
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [sort, setSort] = useState<SortOption>('newest')
@@ -15,10 +16,10 @@ export default function RecipesPage() {
   }, [])
 
   useEffect(() => {
-    async function fetchRecipes() {
-      const res = await fetch('/api/recipes')
+    async function fetchMyRecipes() {
+      const res = await fetch('/api/recipes/your')
+
       const data = await res.json()
-      console.log("Fetched recipes:", data); // Debug log
       const mapped: RecipeCardRecipe[] = data.map((r: any) => ({
         id: r.id,
         slug: r.slug,
@@ -36,23 +37,24 @@ export default function RecipesPage() {
       setRecipes(mapped)
     }
 
-    fetchRecipes()
+    fetchMyRecipes()
   }, [])
 
   return (
     <main className="container">
-      <h1>Browse Recipes</h1>
+      <h1>Your Recipes</h1>
+      <Link href="/recipe/new"><button>Add New Recipe</button></Link>
       {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
 
-      {recipes.length === 0 && (
-        <p>No recipes yet.</p>
+      {recipes.length === 0 ? (
+        <p>You haven't created any recipes yet.</p>
+      ) : (
+        <div>
+          {sorted.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
+          ))}
+        </div>
       )}
-
-      <div>
-        {sorted.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
-        ))}
-      </div>
     </main>
   )
 }

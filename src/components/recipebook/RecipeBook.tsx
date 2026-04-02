@@ -21,9 +21,10 @@ export type RecipeBook = {
 
 interface RecipeBookProps {
   book: RecipeBook;
+  currentUserId?: string | null;
 }
 
-export default function RecipeBook({ book }: RecipeBookProps) {
+export default function RecipeBook({ book, currentUserId }: RecipeBookProps) {
   const { title, description, items, createdAt } = book;
 
   return (
@@ -43,7 +44,7 @@ export default function RecipeBook({ book }: RecipeBookProps) {
           <div>
             {items.map((item) =>
               item.recipe ? (
-                <RecipeCard key={item.id} recipe={item.recipe} />
+                <RecipeCard key={item.id} recipe={item.recipe} currentUserId={currentUserId} />
               ) : (
                 <div key={item.id}>Recipe not found</div>
               )

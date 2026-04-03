@@ -1,14 +1,11 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useState, useMemo, Suspense } from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import Link from 'next/link'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
 import RecipeSortSelect, { type SortOption, sortRecipes } from '@/components/recipe/RecipeSortSelect'
 
-function SearchResults() {
-  const searchParams = useSearchParams()
-  const query = searchParams.get('query') ?? ''
-
+export default function YourRecipesPage() {
   const [recipes, setRecipes] = useState<RecipeCardRecipe[]>([])
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [sort, setSort] = useState<SortOption>('newest')
@@ -19,15 +16,11 @@ function SearchResults() {
   }, [])
 
   useEffect(() => {
-    if (!query) {
-      setRecipes([])
-      return
-    }
+    async function fetchMyRecipes() {
+      const res = await fetch('/api/recipes/your')
 
-    async function fetchRecipes() {
-      const res = await fetch(`/api/recipes/search?query=${encodeURIComponent(query)}`)
       const data = await res.json()
-      const mapped: RecipeCardRecipe[] = data.recipes.map((r: any) => ({
+      const mapped: RecipeCardRecipe[] = data.map((r: any) => ({
         id: r.id,
         slug: r.slug,
         title: r.title,
@@ -44,36 +37,24 @@ function SearchResults() {
       setRecipes(mapped)
     }
 
-    fetchRecipes()
-  }, [query])
+    fetchMyRecipes()
+  }, [])
 
   return (
-    <main className='container'>
-      <h1>Search results for &ldquo;{query}&rdquo;</h1>
-
-      {query && recipes.length === 0 && (
-        <p>No recipes found. Try a different search term.</p>
-      )}
-
-      {!query && (
-        <p>Enter a search term to find recipes.</p>
-      )}
-
+    <main className="container">
+      <h1>Your Recipes</h1>
+      <Link href="/recipe/new"><button>Add New Recipe</button></Link>
       {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
 
-      <div>
-        {sorted.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
-        ))}
-      </div>
+      {recipes.length === 0 ? (
+        <p>You haven't created any recipes yet.</p>
+      ) : (
+        <div>
+          {sorted.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
+          ))}
+        </div>
+      )}
     </main>
-  )
-}
-
-export default function SearchPage() {
-  return (
-    <Suspense>
-      <SearchResults />
-    </Suspense>
   )
 }

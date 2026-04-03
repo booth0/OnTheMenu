@@ -4,7 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -21,6 +23,7 @@ model User {
   recipes     Recipe[]         @relation("author_recipes")
   recipeBooks RecipeBook[]
   reviews     Review[]         @relation("author_reviews")
+  savedRecipes Recipe[]        @relation("saved_recipes")
 }
 
 model Recipe {
@@ -42,6 +45,7 @@ model Recipe {
   author        User             @relation("author_recipes", fields: [authorId], references: [id])
   books         RecipeBookItem[]
   reviews       Review[]
+  savedByUsers  User[]           @relation("saved_recipes")
 }
 
 model Review {

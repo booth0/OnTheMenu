@@ -179,7 +179,7 @@ export type ModerationFlagGroupByOutputType = {
   _max: ModerationFlagMaxAggregateOutputType | null
 }
 
-export type GetModerationFlagGroupByPayload<T extends ModerationFlagGroupByArgs> = Prisma.PrismaPromise<
+type GetModerationFlagGroupByPayload<T extends ModerationFlagGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ModerationFlagGroupByOutputType, T['by']> &
       {

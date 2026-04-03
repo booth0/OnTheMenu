@@ -99,14 +99,23 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
             {isLoggedIn ? (
               <>
                 <span>Hi, {username}!</span>
+                <Link href="/recipe/new" onClick={() => setMenuOpen(false)}>
+                  New Recipe
+                </Link>
                 <Link href="/recipes" onClick={() => setMenuOpen(false)}>
                   Browse Recipes
+                </Link>
+                <Link href="/your-recipes" onClick={() => setMenuOpen(false)}>
+                  Your Recipes
+                </Link>
+                <Link href="/saved-recipes" onClick={() => setMenuOpen(false)}>
+                  Saved Recipes
                 </Link>
                 <Link href="/recipe-books" onClick={() => setMenuOpen(false)}>
                   My Recipe Books
                 </Link>
-                <Link href="/profile" onClick={() => setMenuOpen(false)}>
-                  Profile
+                <Link href="/recipe-books/new" onClick={() => setMenuOpen(false)}>
+                  New Recipe Book
                 </Link>
                 <button>Log Out</button>
               </>

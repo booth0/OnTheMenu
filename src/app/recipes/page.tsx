@@ -1,10 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
+import RecipeSortSelect, { type SortOption, sortRecipes } from '@/components/recipe/RecipeSortSelect'
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<RecipeCardRecipe[]>([])
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const [sort, setSort] = useState<SortOption>('newest')
+  const sorted = useMemo(() => sortRecipes(recipes, sort), [recipes, sort])
+
+  useEffect(() => {
+    fetch('/api/users/me').then(r => r.ok ? r.json() : null).then(u => setCurrentUserId(u?.id ?? null)).catch(() => {})
+  }, [])
 
   useEffect(() => {
     async function fetchRecipes() {
@@ -34,14 +42,15 @@ export default function RecipesPage() {
   return (
     <main className="container">
       <h1>Browse Recipes</h1>
+      {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
 
       {recipes.length === 0 && (
         <p>No recipes yet.</p>
       )}
 
       <div>
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
+        {sorted.map((recipe) => (
+          <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
         ))}
       </div>
     </main>

@@ -40,7 +40,7 @@ function SearchResults() {
   }, [query])
 
   return (
-    <main >
+    <main className='container'>
       <h1>Search results for &ldquo;{query}&rdquo;</h1>
 
       {query && recipes.length === 0 && (

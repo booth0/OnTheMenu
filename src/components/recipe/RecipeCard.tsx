@@ -37,6 +37,15 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 		reviewsCount,
 	} = recipe;
 
+	const formatDate = (date: string | Date) => {
+		const d = typeof date === "string" ? new Date(date) : date;
+		return d.toLocaleDateString(undefined, {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		});
+	};
+
 	return (
 		<article className="card">
 			<style>
@@ -50,6 +59,10 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 						font-weight: bold;
 						color: white;
 						text-decoration: none;
+					}
+					.metrics{
+						display: flex;
+						gap: 10px;
 					}
 				`}
 			</style>
@@ -65,10 +78,10 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 
 			<div>
                 {author?.name ? `By ${author.name}` : ""}
-                {createdAt ? ` • ${createdAt}` : ""}
+                {createdAt ? ` • ${formatDate(createdAt)}` : ""}
 			</div>
 
-			<div>
+			<div className="metrics">
 				<span>Likes: {likesCount ?? 0}</span>
 				<span>Reviews: {reviewsCount ?? 0}</span>
 				<span>Views: {viewsCount ?? 0}</span>

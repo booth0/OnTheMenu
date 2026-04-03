@@ -38,6 +38,14 @@ export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 		reviewsCount,
 	} = recipe;
 
+	const formatDate = (date: string | Date) => {
+		const d = typeof date === "string" ? new Date(date) : date;
+		return d.toLocaleDateString(undefined, {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		});
+	};
 	const isOwner = currentUserId != null && author?.id === currentUserId;
 	const href = isOwner ? `/recipe/edit/${slug}` : `/recipe/${slug}`;
 
@@ -55,6 +63,10 @@ export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 						color: white;
 						text-decoration: none;
 					}
+					.metrics{
+						display: flex;
+						gap: 10px;
+					}
 				`}
 			</style>
 			{featuredImage && (
@@ -69,10 +81,10 @@ export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 
 			<div>
                 {author?.name ? `By ${author.name}` : ""}
-                {createdAt ? ` • ${createdAt}` : ""}
+                {createdAt ? ` • ${formatDate(createdAt)}` : ""}
 			</div>
 
-			<div>
+			<div className="metrics">
 				<span>Likes: {likesCount ?? 0}</span>
 				<span>Reviews: {reviewsCount ?? 0}</span>
 				<span>Views: {viewsCount ?? 0}</span>

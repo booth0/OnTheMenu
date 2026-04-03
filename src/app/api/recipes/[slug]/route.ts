@@ -1,20 +1,46 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthUser } from "@/lib/auth";
 
 export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    console.log("Fetching recipe with slug:", slug);
 
     try {
+        const authUser = await getAuthUser();
+
         const recipe = await prisma.recipe.findUnique({
             where: { slug },
+            include: {
+                likes: true,
+                savedByUsers: true,
+                reviews: { select: { rating: true } },
+            },
         });
 
         if (!recipe) {
             return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
         }
 
-        return NextResponse.json(recipe);
+        const likesCount = recipe.likes.length;
+        const savesCount = recipe.savedByUsers.length;
+        const reviewsCount = recipe.reviews.length;
+        const rating = reviewsCount > 0
+            ? recipe.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewsCount
+            : 0;
+        const likedByUser = authUser ? recipe.likes.some(l => l.userId === authUser.id) : false;
+        const savedByUser = authUser ? recipe.savedByUsers.some(u => u.id === authUser.id) : false;
+
+        const { likes, savedByUsers, reviews, ...recipeBase } = recipe;
+
+        return NextResponse.json({
+            ...recipeBase,
+            likes: likesCount,
+            saves: savesCount,
+            reviews: reviewsCount,
+            rating: Math.round(rating * 10) / 10,
+            likedByUser,
+            savedByUser,
+        });
     } catch (err: any) {
         if (err?.code !== "P2022") {
             return NextResponse.json({ error: err?.message ?? "Failed to fetch recipe" }, { status: 500 });
@@ -57,6 +83,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
                 .split("\n")
                 .map((line) => line.trim())
                 .filter(Boolean),
+            likes: 0,
+            saves: 0,
+            reviews: 0,
+            rating: 0,
+            likedByUser: false,
+            savedByUser: false,
             createdAt: legacyRecipe.createdAt,
             updatedAt: legacyRecipe.updatedAt,
         });

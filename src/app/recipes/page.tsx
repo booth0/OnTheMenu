@@ -3,11 +3,13 @@
 import { useEffect, useState, useMemo } from 'react'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
 import RecipeSortSelect, { type SortOption, sortRecipes } from '@/components/recipe/RecipeSortSelect'
+import { RecipeGridSkeleton } from '@/components/recipe/RecipeCardSkeleton'
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<RecipeCardRecipe[]>([])
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [sort, setSort] = useState<SortOption>('newest')
+  const [loading, setLoading] = useState(true)
   const sorted = useMemo(() => sortRecipes(recipes, sort), [recipes, sort])
 
   useEffect(() => {
@@ -30,11 +32,11 @@ export default function RecipesPage() {
           : null,
         viewsCount: r.viewsCount,
         createdAt: r.createdAt,
-        likesCount: r.likes.length ?? 0,
-        reviewsCount: r.reviews.length ?? 0,
+        likesCount: r._count.likes ?? 0,
+        reviewsCount: r._count.reviews ?? 0,
       }))
       setRecipes(mapped)
-      
+      setLoading(false)
     }
 
     fetchRecipes()
@@ -52,15 +54,17 @@ export default function RecipesPage() {
       <h1>Browse Recipes</h1>
       {recipes.length > 0 && <RecipeSortSelect id="recipe-sort" value={sort} onChange={setSort} />}
 
-      {recipes.length === 0 && (
+      {loading ? (
+        <RecipeGridSkeleton count={6} />
+      ) : recipes.length === 0 ? (
         <p>No recipes yet.</p>
+      ) : (
+        <div className="featured-grid">
+          {sorted.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
+          ))}
+        </div>
       )}
-
-      <div>
-        {sorted.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
-        ))}
-      </div>
     </main>
   )
 }

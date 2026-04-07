@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthUser } from "@/lib/auth";
+import { emitReviewAdded } from "@/lib/socketServer";
 
 // GET /api/recipes/[slug]/reviews  — fetch all reviews for a recipe
 export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
@@ -57,6 +58,26 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
             author: { select: { id: true, username: true } },
             images: { select: { id: true, url: true } },
         },
+    });
+
+    // Compute updated aggregate rating for realtime broadcast
+    const allReviews = await prisma.review.findMany({
+        where: { recipeId: recipe.id },
+        select: { rating: true },
+    });
+    const reviewsCount = allReviews.length;
+    const avgRating = reviewsCount > 0
+        ? Math.round((allReviews.reduce((s, r) => s + r.rating, 0) / reviewsCount) * 10) / 10
+        : 0;
+
+    emitReviewAdded({
+        slug,
+        review: {
+            ...review,
+            createdAt: review.createdAt.toISOString(),
+        },
+        rating: avgRating,
+        reviewsCount,
     });
 
     return NextResponse.json(review, { status: 201 });

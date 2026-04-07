@@ -1,9 +1,11 @@
 ﻿"use client"
 import { Star, ThumbsUp, Bookmark, BookPlus, Trash2, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Button from "@/components/ui/button";
 import ImageViewer from "@/components/ui/imageViewer";
 import { useParams, useRouter } from "next/navigation";
+import { useRecipeSocket } from "@/hooks/useSocket";
 
 
 type RecipeResponse = {
@@ -19,6 +21,9 @@ type RecipeResponse = {
     ingredients: string[];
     directions: string[];
     authorId?: string | null;
+    visibility?: 'PUBLIC' | 'PRIVATE';
+    forcedPrivate?: boolean;
+    forcedPrivateReason?: string | null;
 };
 
 type UserResponse = {
@@ -106,6 +111,13 @@ export default function RecipePage() {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [reviewsLoading, setReviewsLoading] = useState(false);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+    const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
+
+    // Force-private modal state
+    const [forcePrivateOpen, setForcePrivateOpen] = useState(false);
+    const [forcePrivateReason, setForcePrivateReason] = useState('');
+    const [forcePrivateSubmitting, setForcePrivateSubmitting] = useState(false);
+    const [forcePrivateError, setForcePrivateError] = useState<string | null>(null);
 
     const [reviewRating, setReviewRating] = useState(0);
     const [reviewBody, setReviewBody] = useState("");
@@ -115,6 +127,33 @@ export default function RecipePage() {
     const [reviewError, setReviewError] = useState<string | null>(null);
     const [reviewImageUploading, setReviewImageUploading] = useState(false);
     const imageInputRef = useRef<HTMLInputElement>(null);
+    const [rating, setRating] = useState(0);
+
+    // ── Realtime updates via Socket.IO ──────────────────────────────
+    useRecipeSocket(slug, {
+        onLikesUpdated(data) {
+            setLikesCount(data.likesCount);
+        },
+        onReviewAdded(data) {
+            // Replace optimistic review if it exists, otherwise prepend
+            setReviews(prev => {
+                const idx = prev.findIndex(r => r.id === data.review.id);
+                if (idx !== -1) {
+                    const updated = [...prev];
+                    updated[idx] = data.review;
+                    return updated;
+                }
+                return [data.review, ...prev];
+            });
+            setReviewsCount(data.reviewsCount);
+            setRating(data.rating);
+        },
+        onReviewDeleted(data) {
+            setReviews(prev => prev.filter(r => r.id !== data.reviewId));
+            setReviewsCount(data.reviewsCount);
+            setRating(data.rating);
+        },
+    });
 
     useEffect(() => {
         const isLoggedIn = document.cookie.split(";").some(c => c.trim().startsWith("loggedIn="));
@@ -127,6 +166,7 @@ export default function RecipePage() {
             if (res.ok) {
                 const data = await res.json();
                 setCurrentUserId(data?.id ?? null);
+                setCurrentUserRole(data?.role ?? null);
             }
         }).catch(() => { });
     }, [loggedIn]);
@@ -148,6 +188,7 @@ export default function RecipePage() {
                 setLikesCount(data.likes ?? 0);
                 setSavesCount(data.saves ?? 0);
                 setReviewsCount(data.reviews ?? 0);
+                setRating(data.rating ?? 0);
             })
             .catch(err => { if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load recipe."); })
             .finally(() => { if (!cancelled) setLoading(false); });
@@ -262,7 +303,15 @@ export default function RecipePage() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data?.error ?? "Failed to submit review");
-            setReviews(prev => [data, ...prev]);
+            setReviews(prev => {
+                const idx = prev.findIndex(r => r.id === data.id);
+                if (idx !== -1) {
+                    const updated = [...prev];
+                    updated[idx] = data;
+                    return updated;
+                }
+                return [data, ...prev];
+            });
             setReviewsCount(c => c + 1);
             setReviewRating(0);
             setReviewBody("");
@@ -285,16 +334,90 @@ export default function RecipePage() {
         }
     }
 
-    if (loading) return <main><div className="container"><div className="card"><h1>Loading recipe...</h1></div></div></main>;
+    async function handleForcePrivateSubmit() {
+        if (forcePrivateReason.trim().length < 10) {
+            setForcePrivateError('Reason must be at least 10 characters.');
+            return;
+        }
+        setForcePrivateSubmitting(true);
+        setForcePrivateError(null);
+        try {
+            const res = await fetch(`/api/recipes/${slug}/force-private`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reason: forcePrivateReason }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data?.error ?? 'Failed to force-private recipe.');
+            setRecipe(prev => prev ? { ...prev, visibility: 'PRIVATE', forcedPrivate: true, forcedPrivateReason: forcePrivateReason } : prev);
+            setForcePrivateOpen(false);
+            setForcePrivateReason('');
+        } catch (err) {
+            setForcePrivateError(err instanceof Error ? err.message : 'Failed to force-private recipe.');
+        } finally {
+            setForcePrivateSubmitting(false);
+        }
+    }
+
+    if (loading) return (
+        <main>
+            <div className="container">
+                <div className="skeleton" style={{ maxWidth: 600, margin: '2rem auto' }}>
+                    <div className="skeleton-title" />
+                    <div className="skeleton-line short" />
+                    <div className="skeleton-image" />
+                    <div className="skeleton-line long" />
+                    <div className="skeleton-line medium" />
+                    <div className="skeleton-line long" />
+                    <div className="skeleton-line medium" />
+                </div>
+            </div>
+        </main>
+    );
     if (error || !recipe) return <main><div className="container"><div className="card"><h1>Unable to load recipe</h1><p>{error ?? "Recipe not found."}</p></div></div></main>;
 
     const { title, featuredImage } = recipe;
-    const rating = recipe.rating ?? 0;
     const ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
     const directions = Array.isArray(recipe.directions) ? recipe.directions : [];
+    const isModerator = currentUserRole === 'MODERATOR' || currentUserRole === 'ADMIN';
+    const isOwner = currentUserId != null && currentUserId === recipe.authorId;
 
     return (
         <main>
+            {/* Forced-private banner — visible to the recipe owner */}
+            {isOwner && recipe.forcedPrivate && (
+                <div style={{ background: '#fff3cd', border: '2px solid #ffc107', borderRadius: '12px', padding: '1em 1.5em', margin: '1em auto', maxWidth: '800px' }}>
+                    <strong>Your recipe has been set to private by a moderator.</strong>
+                    {recipe.forcedPrivateReason && (
+                        <p style={{ margin: '0.4em 0 0' }}>Reason: {recipe.forcedPrivateReason}</p>
+                    )}
+                </div>
+            )}
+
+            {/* Force-private modal */}
+            {forcePrivateOpen && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }} onClick={() => { if (!forcePrivateSubmitting) setForcePrivateOpen(false) }}>
+                    <div style={{ background: 'white', borderRadius: '16px', padding: '1.5em', maxWidth: '420px', width: '90%', display: 'flex', flexDirection: 'column', gap: '1em', boxShadow: '0 8px 32px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
+                        <h2 style={{ margin: 0 }}>Force Recipe Private</h2>
+                        <p style={{ margin: 0, opacity: 0.7 }}>Provide a reason for locking this recipe (minimum 10 characters). The owner will not be able to re-publish it.</p>
+                        <textarea
+                            style={{ width: '100%', minHeight: '90px', padding: '0.6em', borderRadius: '8px', border: '2px solid #e2e8f0', fontFamily: 'inherit', fontSize: '1em', resize: 'vertical', boxSizing: 'border-box' }}
+                            placeholder="Enter reason…"
+                            value={forcePrivateReason}
+                            onChange={e => { setForcePrivateReason(e.target.value); setForcePrivateError(null); }}
+                            disabled={forcePrivateSubmitting}
+                        />
+                        {forcePrivateError && <p style={{ color: '#e53e3e', margin: 0 }}>{forcePrivateError}</p>}
+                        <div style={{ display: 'flex', gap: '0.75em', justifyContent: 'flex-end' }}>
+                            <Button type="secondary" disabled={forcePrivateSubmitting} onClick={() => setForcePrivateOpen(false)}>Cancel</Button>
+                            <Button type="primary" disabled={forcePrivateSubmitting} onClick={handleForcePrivateSubmit}>
+                                {forcePrivateSubmitting ? 'Applying…' : 'Confirm'}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <style>{`
                 span, button { display: inline-flex; align-items: center; gap: 0.25em; }
                 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1em; }
@@ -340,6 +463,19 @@ export default function RecipePage() {
                             <Button onClick={toggleBookMenu} type="secondary">
                                 <BookPlus size="1em" /> Add to Book
                             </Button>
+                            {isOwner && (
+                                <Button onClick={() => router.push(`/recipe/edit/${slug}`)} type="secondary">
+                                    Edit Recipe
+                                </Button>
+                            )}
+                            {isModerator && recipe.visibility === 'PUBLIC' && (
+                                <button
+                                    style={{ background: '#e53e3e', color: 'white', border: 'none', padding: '0.5em 1em', borderRadius: '0.5em', cursor: 'pointer', fontWeight: 'bold', fontSize: '1em' }}
+                                    onClick={() => { setForcePrivateOpen(true); setForcePrivateReason(''); setForcePrivateError(null); }}
+                                >
+                                    Force Private
+                                </button>
+                            )}
                             {bookMenuOpen && (
                                 <div className="book-dropdown">
                                     {bookMessage && <p style={{ margin: 0, padding: "0.3em 0.6em", fontWeight: "bold" }}>{bookMessage}</p>}
@@ -449,7 +585,7 @@ export default function RecipePage() {
                                     </div>
                                     {review.body && <p style={{ margin: 0 }}>{review.body}</p>}
                                     {review.images.map(img => (
-                                        <img key={img.id} src={img.url} alt="Review photo" className="review-image" />
+                                        <Image key={img.id} src={img.url} alt="Review photo" className="review-image" width={240} height={180}/>
                                     ))}
                                 </div>
                             ))}

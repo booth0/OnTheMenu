@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthUser } from "@/lib/auth";
+import { emitLikesUpdated } from "@/lib/socketServer";
 
 // POST /api/recipes/[slug]/like  — toggles like on/off
 export async function POST(req: Request, { params }: { params: Promise<{ slug: string }> }) {
@@ -17,9 +18,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
 
     if (existing) {
         await prisma.like.delete({ where: { id: existing.id } });
+        const likesCount = await prisma.like.count({ where: { recipeId: recipe.id } });
+        emitLikesUpdated(slug, likesCount);
         return NextResponse.json({ liked: false });
     } else {
         await prisma.like.create({ data: { recipeId: recipe.id, userId: authUser.id } });
+        const likesCount = await prisma.like.count({ where: { recipeId: recipe.id } });
+        emitLikesUpdated(slug, likesCount);
         return NextResponse.json({ liked: true });
     }
 }

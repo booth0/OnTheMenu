@@ -236,7 +236,7 @@ export default function RecipePage() {
     }
 
     async function handleToggleLike() {
-        if (!loggedIn) { router.push("/auth/login"); return; }
+        if (!loggedIn) { router.push("/login"); return; }
         const prev = likedByUser;
         setLikedByUser(!prev);
         setLikesCount(c => prev ? c - 1 : c + 1);
@@ -252,7 +252,7 @@ export default function RecipePage() {
     }
 
     async function handleToggleSave() {
-        if (!loggedIn) { router.push("/auth/login"); return; }
+        if (!loggedIn) { router.push("/login"); return; }
         const prev = savedByUser;
         setSavedByUser(!prev);
         setSavesCount(c => prev ? Math.max(0, c - 1) : c + 1);
@@ -291,7 +291,7 @@ export default function RecipePage() {
 
     async function handleReviewSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (!loggedIn) { router.push("/auth/login"); return; }
+        if (!loggedIn) { router.push("/login"); return; }
         if (reviewRating === 0) { setReviewError("Please select a rating."); return; }
         setReviewSubmitting(true);
         setReviewError(null);
@@ -557,7 +557,7 @@ export default function RecipePage() {
                             </div>
                         </form>
                     ) : (
-                        <p><a href="/auth/login" style={{ color: "var(--secondary-color)" }}>Log in</a> to leave a review.</p>
+                        <p><a href="/login" style={{ color: "var(--secondary-color)" }}>Log in</a> to leave a review.</p>
                     )}
 
                     <hr style={{ margin: "1.5em 0", opacity: 0.15 }} />

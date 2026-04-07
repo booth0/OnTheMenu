@@ -95,7 +95,6 @@ export default function RecipeCard({ recipe, currentUserId, priority }: RecipeCa
 				<div className="metrics">
 					<span>Likes: {likesCount ?? 0}</span>
 					<span>Reviews: {reviewsCount ?? 0}</span>
-					<span>Views: {viewsCount ?? 0}</span>
 				</div>
 			</div>
 		</article>

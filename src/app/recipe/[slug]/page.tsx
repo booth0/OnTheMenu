@@ -1,6 +1,7 @@
 ﻿"use client"
 import { Star, ThumbsUp, Bookmark, BookPlus, Trash2, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Button from "@/components/ui/button";
 import ImageViewer from "@/components/ui/imageViewer";
 import { useParams, useRouter } from "next/navigation";
@@ -321,7 +322,21 @@ export default function RecipePage() {
         }
     }
 
-    if (loading) return <main><div className="container"><div className="card"><h1>Loading recipe...</h1></div></div></main>;
+    if (loading) return (
+        <main>
+            <div className="container">
+                <div className="skeleton" style={{ maxWidth: 600, margin: '2rem auto' }}>
+                    <div className="skeleton-title" />
+                    <div className="skeleton-line short" />
+                    <div className="skeleton-image" />
+                    <div className="skeleton-line long" />
+                    <div className="skeleton-line medium" />
+                    <div className="skeleton-line long" />
+                    <div className="skeleton-line medium" />
+                </div>
+            </div>
+        </main>
+    );
     if (error || !recipe) return <main><div className="container"><div className="card"><h1>Unable to load recipe</h1><p>{error ?? "Recipe not found."}</p></div></div></main>;
 
     const { title, featuredImage } = recipe;
@@ -534,7 +549,7 @@ export default function RecipePage() {
                                     </div>
                                     {review.body && <p style={{ margin: 0 }}>{review.body}</p>}
                                     {review.images.map(img => (
-                                        <img key={img.id} src={img.url} alt="Review photo" className="review-image" />
+                                        <Image key={img.id} src={img.url} alt="Review photo" className="review-image" width={240} height={180}/>
                                     ))}
                                 </div>
                             ))}

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 type Author = {
 	id: string;
@@ -36,7 +37,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
 			{Array.isArray(images) && images.length > 0 && (
 				<div>
 					{images.map((src, i) => (
-						<img key={i} src={src} alt={`review-image-${i}`}/>
+						<Image key={i} src={src} alt={`review-image-${i}`} width={240} height={180}/>
 					))}
 				</div>
 			)}

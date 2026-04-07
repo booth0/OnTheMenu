@@ -123,7 +123,12 @@ export default function Header({ isLoggedIn = false, username, role }: HeaderPro
                     Moderation
                   </Link>
                 )}
-                <button>Log Out</button>
+                <button onClick={async () => {
+                  await fetch('/api/auth/logout', { method: 'POST' })
+                  setMenuOpen(false)
+                  router.push('/login')
+                  router.refresh()
+                }}>Log Out</button>
               </>
             ) : (
               <>

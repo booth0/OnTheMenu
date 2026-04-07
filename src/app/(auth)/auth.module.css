@@ -1,0 +1,61 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  color: var(--text-color);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin-bottom: 1.25rem;
+}
+
+.label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.input {
+  padding: 0.5em;
+  font-size: 1em;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  font-family: inherit;
+  background: white;
+  color: var(--text-color);
+}
+
+.error {
+  color: #ff6b6b;
+  margin: 0 0 1rem;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.footer a {
+  color: var(--text-color);
+  font-weight: 700;
+}

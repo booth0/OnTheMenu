@@ -1,14 +1,14 @@
 :root{
     --primary-color: #c39259;
     --primary-shadow: hsl(from var(--primary-color) h s calc(l - 15));
-    --secondary-color: #597A9C;
+    --secondary-color: #375A7C;
     --secondary-shadow: hsl(from var(--secondary-color) h s calc(l - 15));
     --accent-color: #FFB5C0;
     --accent-shadow: hsl(from var(--accent-color) h s calc(l - 15));
     --background-color: #F1CCB7;
     --background-shadow: hsl(from var(--background-color) h s calc(l - 15));
     --text-light-color: #ffffff;
-    --text-color: #333333;
+    --text-color: #0D0D0D;
 }
 
 * {
@@ -168,6 +168,7 @@ button {
 
 .action-card.primary-card {
     background-color: var(--primary-color);
+    color: var(--text-color);
     box-shadow: 0 10px 0 var(--primary-shadow);
     &:hover { box-shadow: 0 14px 0 var(--primary-shadow); }
 }

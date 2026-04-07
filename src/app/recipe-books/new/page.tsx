@@ -31,7 +31,7 @@ export default function NewRecipeBookPage() {
   return (
     <main className="container">
       <h1>Create a Recipe Book</h1>
-      <form onSubmit={handleSubmit} className="card">
+      <form onSubmit={handleSubmit} className="card" style={{ color: 'var(--text-color)' }}>
         <label>
           Name
           <input

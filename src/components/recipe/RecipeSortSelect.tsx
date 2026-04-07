@@ -42,13 +42,15 @@ export function sortRecipes(recipes: RecipeCardRecipe[], sort: SortOption): Reci
 interface RecipeSortSelectProps {
   value: SortOption
   onChange: (value: SortOption) => void
+  id: string
 }
 
-export default function RecipeSortSelect({ value, onChange }: RecipeSortSelectProps) {
+export default function RecipeSortSelect({ value, onChange, id }: RecipeSortSelectProps) {
   return (
     <select
       value={value}
       onChange={(e) => onChange(e.target.value as SortOption)}
+      id={id}
       style={{
         padding: '8px 12px',
         borderRadius: '0.5em',
@@ -59,6 +61,7 @@ export default function RecipeSortSelect({ value, onChange }: RecipeSortSelectPr
         cursor: 'pointer',
         background: 'white',
         color: 'var(--text-color)',
+        marginBottom: '1em',
       }}
     >
       {(Object.entries(SORT_LABELS) as [SortOption, string][]).map(([key, label]) => (

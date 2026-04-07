@@ -20,6 +20,10 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
       router.push(`/search?query=${encodeURIComponent(trimmed)}`) 
   }
 
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    router.refresh()
+  }
   return (
     <header>
       <style>
@@ -38,6 +42,13 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
                   font-weight: bold;
                   color: white;
                   text-decoration: none;
+                  #logoImage{
+                      display: flex;
+                      align-items: center;
+                      img{
+                          height: 1.5em;
+                        }
+                  } 
               }
               .search{
                   display: flex;
@@ -73,7 +84,10 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
       </style>
       {/* LEFT — Logo */}
       <Link href="/" className='logo'>
-        <span>OnTheMenu</span>
+        <span id='logoImage'>
+            <img src="/images/OnTheMenu.svg" alt="OnTheMenu" style={{ color: 'white' }} />
+          OnTheMenu
+        </span>
       </Link>
 
       {/* CENTER — Search */}
@@ -117,7 +131,7 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
                 <Link href="/recipe-books/new" onClick={() => setMenuOpen(false)}>
                   New Recipe Book
                 </Link>
-                <button>Log Out</button>
+                <button onClick={handleLogout}>Log Out</button>
               </>
             ) : (
               <>

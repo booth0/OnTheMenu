@@ -59,7 +59,7 @@ function SearchResults() {
         <p>Enter a search term to find recipes.</p>
       )}
 
-      {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
+      {recipes.length > 0 && <RecipeSortSelect id="sort-recipe" value={sort} onChange={setSort} />}
 
       <div>
         {sorted.map((recipe) => (

@@ -14,7 +14,7 @@ export async function GET(req: Request) {
         take,
         skip,
         select: {
-            id: true, title: true, slug: true, description: true, featuredImage: true, createdAt: true
+            id: true, title: true, slug: true, description: true, featuredImage: true, createdAt: true, likes: true, savedByUsers: true, reviews: { select: { rating: true } }
         }
     });
     return NextResponse.json(recipes);

@@ -6,6 +6,9 @@ import "./app.css";
 
 export const metadata: Metadata = {
   title: "OnTheMenu",
+  icons: {
+    icon: "/images/OnTheMenu.svg",
+  },
 };
 
 export default async function RootLayout({

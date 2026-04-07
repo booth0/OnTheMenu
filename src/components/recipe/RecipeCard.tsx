@@ -25,7 +25,7 @@ interface RecipeCardProps {
 	currentUserId?: string | null;
 }
 
-export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
+export default function RecipeCard({ recipe, currentUserId}: RecipeCardProps) {
 	const {
 		slug,
 		title,
@@ -55,6 +55,8 @@ export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 				{`
 					.featuredImage {
 						width: 400px;
+						aspect-ratio: 4 / 3;
+						object-fit: cover;
 						align-self: center;
 					}
 					.title {

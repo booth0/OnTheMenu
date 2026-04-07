@@ -30,10 +30,11 @@ export default function RecipesPage() {
           : null,
         viewsCount: r.viewsCount,
         createdAt: r.createdAt,
-        likesCount: r._count?.likes ?? 0,
-        reviewsCount: r._count?.reviews ?? 0,
+        likesCount: r.likes.length ?? 0,
+        reviewsCount: r.reviews.length ?? 0,
       }))
       setRecipes(mapped)
+      
     }
 
     fetchRecipes()
@@ -41,8 +42,15 @@ export default function RecipesPage() {
 
   return (
     <main className="container">
+      <style>
+        {`
+          select {
+            margin-bottom: 1em;
+          }
+        `}
+      </style>
       <h1>Browse Recipes</h1>
-      {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
+      {recipes.length > 0 && <RecipeSortSelect id="recipe-sort" value={sort} onChange={setSort} />}
 
       {recipes.length === 0 && (
         <p>No recipes yet.</p>

@@ -65,34 +65,39 @@ export default function RecipeCard({ recipe, currentUserId, priority }: RecipeCa
 					.title {
 						font-size: 1.2em;
 						font-weight: bold;
-						color: white;
+						color: var(--secondary-color);
 						text-decoration: none;
 					}
 					.metrics{
 						display: flex;
 						gap: 10px;
 					}
+					article.card > .card {
+						flex: 1;
+					}
 				`}
 			</style>
 			{featuredImage && (
-					<Image src={featuredImage} alt={title} className="featuredImage" width={400} height={300} priority={priority}/>
+				<Image src={featuredImage} alt={title} className="featuredImage" width={400} height={300} priority={priority}/>
 			)}
 
-			<h3>
-				<Link href={href} className="title">{title}</Link>
-			</h3>
+			<div className="card light centered">
+				<h3>
+					<Link href={href} className="title">{title}</Link>
+				</h3>
 
-			{description && <p>{description}</p>}
+				{description && <p>{description}</p>}
 
-			<div>
-                {author?.name ? `By ${author.name}` : ""}
-                {createdAt ? ` • ${formatDate(createdAt)}` : ""}
-			</div>
+				<div>
+					{author?.name ? `By ${author.name}` : ""}
+					{createdAt ? ` • ${formatDate(createdAt)}` : ""}
+				</div>
 
-			<div className="metrics">
-				<span>Likes: {likesCount ?? 0}</span>
-				<span>Reviews: {reviewsCount ?? 0}</span>
-				<span>Views: {viewsCount ?? 0}</span>
+				<div className="metrics">
+					<span>Likes: {likesCount ?? 0}</span>
+					<span>Reviews: {reviewsCount ?? 0}</span>
+					<span>Views: {viewsCount ?? 0}</span>
+				</div>
 			</div>
 		</article>
 	);

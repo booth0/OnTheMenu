@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import styles from '../auth.module.css'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -38,21 +39,24 @@ export default function LoginPage() {
   }
 
   return (
-    <main style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '300px' }}>
-        <h1>Log In</h1>
+    <main className={styles.page}>
+      <div className={`card ${styles.card}`}>
+        <form action={handleSubmit} className={styles.form}>
+          <h1 className={styles.title}>Log In</h1>
 
-        <input name="username" type="text" placeholder="Username" required />
-        <input name="password" type="password" placeholder="Password" required />
+          <label className={styles.label} htmlFor="username">Username</label>
+          <input className={styles.input} id="username" name="username" type="text" placeholder="Username" required />
 
-        {error && <p style={{ color: 'red', margin: 0 }}>{error}</p>}
-        {banReason && (
-          <p style={{ color: 'red', margin: 0, fontSize: '0.9em' }}>Reason: {banReason}</p>
-        )}
+          <label className={styles.label} htmlFor="password">Password</label>
+          <input className={styles.input} id="password" name="password" type="password" placeholder="Password" required />
 
-        <button type="submit">Log in</button>
-        <p style={{ margin: 0 }}>Don&apos;t have an account? <Link href="/register">Sign up</Link></p>
-      </form>
+          {error && <p className={styles.error}>{error}</p>}
+          {banReason && <p className={styles.error}>Reason: {banReason}</p>}
+
+          <button type="submit" className={`primary ${styles.submitBtn}`}>Log in</button>
+          <p className={styles.footer}>Don&apos;t have an account? <Link href="/register">Sign up</Link></p>
+        </form>
+      </div>
     </main>
   )
 }

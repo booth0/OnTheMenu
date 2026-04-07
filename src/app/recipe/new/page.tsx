@@ -115,7 +115,7 @@ export default function NewRecipePage() {
                 `}
             </style>
             <h1>New Recipe</h1>
-            <div className="card">
+            <div className="card" style={{ color: 'var(--text-color)' }}>
                 <form onSubmit={handleSubmit} className="newRecipeForm">
                     <label htmlFor="visibility">Is this recipe public or private?</label>
                     <select id="visibility" name="visibility" required>

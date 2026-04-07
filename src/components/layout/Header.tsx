@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { ChevronDown } from 'lucide-react'
+import styles from './Header.module.css'
 
 interface HeaderProps {
   isLoggedIn?: boolean
@@ -12,135 +14,123 @@ interface HeaderProps {
 
 export default function Header({ isLoggedIn = false, username, role }: HeaderProps) {
   const router = useRouter()
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
     const trimmed = searchQuery.trim()
-      router.push(`/search?query=${encodeURIComponent(trimmed)}`) 
+    router.push(`/search?query=${encodeURIComponent(trimmed)}`)
+  }
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    router.push('/')
+    router.refresh()
   }
 
   return (
-    <header>
-      <style>
-        {`
-          header {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              padding: 1rem 2rem;
-              background-color: var(--secondary-color);
-              color: white;
-              position: sticky;
-              box-shadow: 0 5px 0 var(--secondary-shadow);
-              .logo{
-                  font-size: 1.5rem;
-                  font-weight: bold;
-                  color: white;
-                  text-decoration: none;
-              }
-              .search{
-                  display: flex;
-                  gap: 0.5em;
-                  input[type="text"] {
-                      padding: 0.5rem;
-                      border: none;
-                      border-radius: 5px;
-                      width: 200px;
-                  }
-              }
-              #toggle{
-                  anchor-name: --toggle;
-                }
-              nav{
-                  position-anchor: --toggle;
-                  position: absolute;
-                  position-area: left bottom;
-                  display: flex;
-                  flex-direction: column;
-                  background: var(--accent-color);
-                  padding: 1em;
-                  border-radius: 5px;
-                  box-shadow: 0 5px 0 var(--accent-shadow);
-                  a{
-                      color: white;
-                      text-decoration: none;
-                      padding: 0.2em;
-                      }
-              }
-          }
-          `}
-      </style>
-      {/* LEFT — Logo */}
-      <Link href="/" className='logo'>
-        <span>OnTheMenu</span>
-      </Link>
+    <header className={styles.siteHeader}>
+      {/* Logo */}
+      <Link href="/" className={styles.logo}>OnTheMenu</Link>
 
-      {/* CENTER — Search */}
-      <form onSubmit={handleSearch} className='search'>
+      {/* Search */}
+      <form onSubmit={handleSearch} className={styles.search}>
         <input
           type="text"
           placeholder="Search recipes..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit">Search</button>
+        <button type="submit" className={styles.searchSubmit}>Search</button>
       </form>
 
-      {/* RIGHT — Hamburger */}
-      <div>
-        <button onClick={() => setMenuOpen((prev) => !prev)} aria-label="Toggle menu" id='toggle'>
-          ☰
-        </button>
+      {/* Desktop Nav */}
+      <nav className={styles.desktopNav}>
+        <Link href="/recipes" className={styles.browseBtn}>Browse</Link>
 
-        {/* Dropdown */}
-        {menuOpen && (
-          <nav>
-            {isLoggedIn ? (
+        {isLoggedIn && (
+          <Link href="/recipe/new" className={styles.newRecipeBtn}>+ New Recipe</Link>
+        )}
+
+        {isLoggedIn ? (
+          <div className={styles.profileWrapper}>
+            <button
+              className={styles.profilePill}
+              onClick={() => setProfileOpen((p) => !p)}
+              aria-label="Open profile menu"
+            >
+              👤 {username}
+              <ChevronDown
+                size={14}
+                style={{
+                  transition: 'transform 0.2s',
+                  transform: profileOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}
+              />
+            </button>
+
+            {profileOpen && (
               <>
-                <span>Hi, {username}!</span>
-                <Link href="/recipe/new" onClick={() => setMenuOpen(false)}>
-                  New Recipe
-                </Link>
-                <Link href="/recipes" onClick={() => setMenuOpen(false)}>
-                  Browse Recipes
-                </Link>
-                <Link href="/your-recipes" onClick={() => setMenuOpen(false)}>
-                  Your Recipes
-                </Link>
-                <Link href="/saved-recipes" onClick={() => setMenuOpen(false)}>
-                  Saved Recipes
-                </Link>
-                <Link href="/recipe-books" onClick={() => setMenuOpen(false)}>
-                  My Recipe Books
-                </Link>
-                <Link href="/recipe-books/new" onClick={() => setMenuOpen(false)}>
-                  New Recipe Book
-                </Link>
-                {(role === 'MODERATOR' || role === 'ADMIN') && (
-                  <Link href="/moderation" onClick={() => setMenuOpen(false)}>
-                    Moderation
-                  </Link>
-                )}
-                <button>Log Out</button>
-              </>
-            ) : (
-              <>
-                <Link href="/recipes" onClick={() => setMenuOpen(false)}>
-                  Browse Recipes
-                </Link>
-                <Link href="/login" onClick={() => setMenuOpen(false)}>
-                  Log In
-                </Link>
-                <Link href="/signup" onClick={() => setMenuOpen(false)}>
-                  Sign Up
-                </Link>
+                <div className={styles.dropdownOverlay} onClick={() => setProfileOpen(false)} />
+                <div className={styles.profileDropdown}>
+                  <span className={styles.dropdownGreeting}>Hi, {username}!</span>
+                  <Link href="/your-recipes" onClick={() => setProfileOpen(false)}>Your Recipes</Link>
+                  <Link href="/saved-recipes" onClick={() => setProfileOpen(false)}>Saved Recipes</Link>
+                  <Link href="/recipe-books" onClick={() => setProfileOpen(false)}>Recipe Books</Link>
+                  {(role === 'MODERATOR' || role === 'ADMIN') && (
+                    <Link href="/moderation" onClick={() => setProfileOpen(false)}>Moderation</Link>
+                  )}
+                  <div className={styles.dropdownDivider} />
+                  <button className={styles.logoutBtn} onClick={handleLogout}>Log Out</button>
+                </div>
               </>
             )}
-          </nav>
+          </div>
+        ) : (
+          <>
+            <Link href="/login" className={styles.navLink}>Log In</Link>
+            <Link href="/register" className={styles.signupBtn}>Sign Up</Link>
+          </>
         )}
-      </div>
+      </nav>
+
+      {/* Mobile hamburger */}
+      <button
+        className={styles.hamburger}
+        onClick={() => setMobileMenuOpen((p) => !p)}
+        aria-label="Toggle menu"
+      >
+        ☰
+      </button>
+
+      {/* Mobile nav */}
+      {mobileMenuOpen && (
+        <nav className={styles.mobileNav}>
+          {isLoggedIn ? (
+            <>
+              <span>Hi, {username}!</span>
+              <Link href="/recipe/new" onClick={() => setMobileMenuOpen(false)}>+ New Recipe</Link>
+              <Link href="/recipes" onClick={() => setMobileMenuOpen(false)}>Browse Recipes</Link>
+              <Link href="/your-recipes" onClick={() => setMobileMenuOpen(false)}>Your Recipes</Link>
+              <Link href="/saved-recipes" onClick={() => setMobileMenuOpen(false)}>Saved Recipes</Link>
+              <Link href="/recipe-books" onClick={() => setMobileMenuOpen(false)}>Recipe Books</Link>
+              {(role === 'MODERATOR' || role === 'ADMIN') && (
+                <Link href="/moderation" onClick={() => setMobileMenuOpen(false)}>Moderation</Link>
+              )}
+              <div className={styles.mobileDivider} />
+              <button className={styles.mobileLogout} onClick={handleLogout}>Log Out</button>
+            </>
+          ) : (
+            <>
+              <Link href="/recipes" onClick={() => setMobileMenuOpen(false)}>Browse Recipes</Link>
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)}>Log In</Link>
+              <Link href="/register" onClick={() => setMobileMenuOpen(false)}>Sign Up</Link>
+            </>
+          )}
+        </nav>
+      )}
     </header>
   )
 }

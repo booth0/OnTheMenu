@@ -4,8 +4,11 @@ import BanChecker from "@/components/BanChecker";
 import { getAuthUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { Nunito } from "next/font/google";
 import type { Metadata } from "next";
 import "./app.css";
+
+const nunito = Nunito({ subsets: ["latin"], weight: ["200", "300", "400", "500", "600", "700", "800", "900"] });
 
 export const metadata: Metadata = {
   title: "OnTheMenu",
@@ -30,7 +33,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body>
+      <body className={nunito.className}>
         <BanChecker />
         <Header isLoggedIn={!!user} username={user?.username} role={user?.role}/>
          {children}

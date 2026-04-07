@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
+    "test": "cypress run",
+    "test:open": "cypress open",
     "seed": "npx tsx prisma/seed.ts"
   },
   "prisma": {
@@ -32,6 +34,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "cypress": "^15.13.0",
     "tsx": "^4.21.0",
     "typescript": "^5.0.0"
   }

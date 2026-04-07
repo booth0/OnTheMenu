@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 
 type Author = {
@@ -23,9 +24,10 @@ export type RecipeCardRecipe = {
 interface RecipeCardProps {
 	recipe: RecipeCardRecipe;
 	currentUserId?: string | null;
+	priority?: boolean;
 }
 
-export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
+export default function RecipeCard({ recipe, currentUserId, priority }: RecipeCardProps) {
 	const {
 		slug,
 		title,
@@ -53,8 +55,11 @@ export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 			<style>
 				{`
 					.featuredImage {
-						width: 400px;
+						width: 100%;
+						max-width: 400px;
 						align-self: center;
+						border-radius: 12px;
+						object-fit: cover;
 					}
 					.title {
 						font-size: 1.2em;
@@ -69,7 +74,7 @@ export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 				`}
 			</style>
 			{featuredImage && (
-					<img src={featuredImage} alt={title} className="featuredImage"/>
+					<Image src={featuredImage} alt={title} className="featuredImage" width={400} height={300} priority={priority}/>
 			)}
 
 			<h3>

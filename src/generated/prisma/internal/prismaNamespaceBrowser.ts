@@ -83,6 +83,8 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
+  isBanned: 'isBanned',
+  banReason: 'banReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -98,6 +100,8 @@ export const RecipeScalarFieldEnum = {
   ingredients: 'ingredients',
   directions: 'directions',
   visibility: 'visibility',
+  forcedPrivate: 'forcedPrivate',
+  forcedPrivateReason: 'forcedPrivateReason',
   featuredImage: 'featuredImage',
   authorId: 'authorId',
   viewsCount: 'viewsCount',

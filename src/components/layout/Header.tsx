@@ -7,9 +7,10 @@ import Link from 'next/link'
 interface HeaderProps {
   isLoggedIn?: boolean
   username?: string
+  role?: string
 }
 
-export default function Header({ isLoggedIn = false, username }: HeaderProps) {
+export default function Header({ isLoggedIn = false, username, role }: HeaderProps) {
   const router = useRouter()
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -117,6 +118,11 @@ export default function Header({ isLoggedIn = false, username }: HeaderProps) {
                 <Link href="/recipe-books/new" onClick={() => setMenuOpen(false)}>
                   New Recipe Book
                 </Link>
+                {(role === 'MODERATOR' || role === 'ADMIN') && (
+                  <Link href="/moderation" onClick={() => setMenuOpen(false)}>
+                    Moderation
+                  </Link>
+                )}
                 <button>Log Out</button>
               </>
             ) : (

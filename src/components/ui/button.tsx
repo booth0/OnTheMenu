@@ -5,7 +5,7 @@ export default function Button({
     type
 }: {
     children: React.ReactNode;
-    onClick: () => void;
+    onClick?: () => void;
     disabled?: boolean;
     type: "primary" | "secondary";
 }) {

@@ -557,7 +557,7 @@ export default function RecipePage() {
                             </div>
                         </form>
                     ) : (
-                        <p><a href="/auth/login" style={{ color: "var(--primary-color)" }}>Log in</a> to leave a review.</p>
+                        <p><a href="/auth/login" style={{ color: "var(--secondary-color)" }}>Log in</a> to leave a review.</p>
                     )}
 
                     <hr style={{ margin: "1.5em 0", opacity: 0.15 }} />

@@ -18,13 +18,16 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
 
     if (existing) {
         await prisma.like.delete({ where: { id: existing.id } });
-        const likesCount = await prisma.like.count({ where: { recipeId: recipe.id } });
-        emitLikesUpdated(slug, likesCount);
+        // Emit asynchronously so connection is released before the next query
+        prisma.like.count({ where: { recipeId: recipe.id } })
+            .then(likesCount => emitLikesUpdated(slug, likesCount))
+            .catch(() => {});
         return NextResponse.json({ liked: false });
     } else {
         await prisma.like.create({ data: { recipeId: recipe.id, userId: authUser.id } });
-        const likesCount = await prisma.like.count({ where: { recipeId: recipe.id } });
-        emitLikesUpdated(slug, likesCount);
+        prisma.like.count({ where: { recipeId: recipe.id } })
+            .then(likesCount => emitLikesUpdated(slug, likesCount))
+            .catch(() => {});
         return NextResponse.json({ liked: true });
     }
 }

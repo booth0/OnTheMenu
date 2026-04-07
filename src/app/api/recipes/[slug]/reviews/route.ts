@@ -60,25 +60,24 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
         },
     });
 
-    // Compute updated aggregate rating for realtime broadcast
-    const allReviews = await prisma.review.findMany({
+    // Compute aggregate stats asynchronously to avoid exhausting connection pool
+    prisma.review.aggregate({
         where: { recipeId: recipe.id },
-        select: { rating: true },
-    });
-    const reviewsCount = allReviews.length;
-    const avgRating = reviewsCount > 0
-        ? Math.round((allReviews.reduce((s, r) => s + r.rating, 0) / reviewsCount) * 10) / 10
-        : 0;
-
-    emitReviewAdded({
-        slug,
-        review: {
-            ...review,
-            createdAt: review.createdAt.toISOString(),
-        },
-        rating: avgRating,
-        reviewsCount,
-    });
+        _avg: { rating: true },
+        _count: { id: true },
+    }).then(agg => {
+        const reviewsCount = agg._count.id;
+        const avgRating = Math.round((agg._avg.rating ?? 0) * 10) / 10;
+        emitReviewAdded({
+            slug,
+            review: {
+                ...review,
+                createdAt: review.createdAt.toISOString(),
+            },
+            rating: avgRating,
+                reviewsCount,
+        });
+    }).catch(() => {});
 
     return NextResponse.json(review, { status: 201 });
 }

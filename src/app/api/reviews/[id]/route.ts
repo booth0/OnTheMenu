@@ -23,27 +23,22 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     await prisma.image.deleteMany({ where: { reviewId: id } });
     await prisma.review.delete({ where: { id } });
 
-    // Compute updated stats and emit via Socket.IO
-    const recipe = await prisma.recipe.findUnique({
-        where: { id: review.recipeId },
-        select: { slug: true },
-    });
-    if (recipe) {
-        const remaining = await prisma.review.findMany({
-            where: { recipeId: review.recipeId },
-            select: { rating: true },
-        });
-        const reviewsCount = remaining.length;
-        const avgRating = reviewsCount > 0
-            ? Math.round((remaining.reduce((s, r) => s + r.rating, 0) / reviewsCount) * 10) / 10
-            : 0;
+    // Compute updated stats asynchronously to avoid exhausting connection pool
+    const recipeId = review.recipeId;
+    Promise.all([
+        prisma.recipe.findUnique({ where: { id: recipeId }, select: { slug: true } }),
+        prisma.review.aggregate({ where: { recipeId }, _avg: { rating: true }, _count: { id: true } }),
+    ]).then(([recipeRow, agg]) => {
+        if (!recipeRow) return;
+        const reviewsCount = agg._count.id;
+        const avgRating = Math.round((agg._avg.rating ?? 0) * 10) / 10;
         emitReviewDeleted({
-            slug: recipe.slug,
+            slug: recipeRow.slug,
             reviewId: id,
             rating: avgRating,
             reviewsCount,
         });
-    }
+    }).catch(() => {});
 
     return new NextResponse(null, { status: 204 });
 }

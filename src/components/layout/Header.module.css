@@ -176,7 +176,7 @@
   right: 0;
   background: var(--accent-color);
   border-radius: 0.75rem;
-  box-shadow: 0 6px 0 var(--accent-shadow), 0 0 0 2px var(--secondary-color);
+  box-shadow: 0 6px 0 var(--accent-shadow);
   padding: 0.4rem;
   min-width: 185px;
   z-index: 100;

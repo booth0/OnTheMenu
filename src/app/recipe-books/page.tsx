@@ -35,7 +35,7 @@ export default function RecipeBooksPage() {
         <div>
           {books.map((book) => (
             <Link href={`/recipe-books/${book.id}`} key={book.id} style={{ textDecoration: 'none' }}>
-              <div className="card">
+              <div className="card" style={{ color: 'var(--text-color)' }}>
                 <h2>{book.title}</h2>
                 {book.description && <p>{book.description}</p>}
                 <p>{book._count.items} {book._count.items === 1 ? 'recipe' : 'recipes'}</p>

@@ -148,7 +148,7 @@ export default function ModerationPage() {
     return (
       <main>
         <div className="container">
-          <div className="card"><h1>Loading...</h1></div>
+          <div className="card" style={{ color: 'var(--text-color)' }}><h1>Loading...</h1></div>
         </div>
       </main>
     )
@@ -196,7 +196,7 @@ export default function ModerationPage() {
       `}</style>
 
       <div className="container">
-        <div className="card">
+        <div className="card" style={{ color: 'var(--text-color)' }}>
           <h1>Moderation</h1>
           <p style={{ opacity: 0.8 }}>
             {currentUserRole === 'ADMIN' ? 'Admin access — full control.' : 'Moderator access.'}

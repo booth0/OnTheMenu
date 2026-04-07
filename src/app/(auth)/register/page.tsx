@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import styles from '../auth.module.css'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -41,19 +42,26 @@ export default function RegisterPage() {
   }
 
   return (
-    <main style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '300px' }}>
-        <h1>Sign Up</h1>
+    <main className={styles.page}>
+      <div className={`card ${styles.card}`}>
+        <form action={handleSubmit} className={styles.form}>
+          <h1 className={styles.title}>Sign Up</h1>
 
-        <input name="username" type="text" placeholder="Username" required />
-        <input name="email" type="email" placeholder="Email (optional)" />
-        <input name="password" type="password" placeholder="Password" required />
+          <label className={styles.label} htmlFor="username">Username</label>
+          <input className={styles.input} id="username" name="username" type="text" placeholder="Username" required />
 
-        {error && <p style={{ color: 'red', margin: 0 }}>{error}</p>}
+          <label className={styles.label} htmlFor="email">Email <span style={{ opacity: 0.7, fontWeight: 400 }}>(optional)</span></label>
+          <input className={styles.input} id="email" name="email" type="email" placeholder="Email" />
 
-        <button type="submit">Create account</button>
-        <p style={{ margin: 0 }}>Already have an account? <Link href="/login">Log in</Link></p>
-      </form>
+          <label className={styles.label} htmlFor="password">Password</label>
+          <input className={styles.input} id="password" name="password" type="password" placeholder="Password" required />
+
+          {error && <p className={styles.error}>{error}</p>}
+
+          <button type="submit" className={`primary ${styles.submitBtn}`}>Create account</button>
+          <p className={styles.footer}>Already have an account? <Link href="/login">Log in</Link></p>
+        </form>
+      </div>
     </main>
   )
 }

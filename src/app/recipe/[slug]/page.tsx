@@ -394,7 +394,8 @@ export default function RecipePage() {
                 .ingredient { border: 3px dashed var(--primary-color); padding: 0.5em; border-radius: 10px; }
                 .direction { border: 3px solid var(--secondary-color); border-radius: 10px; padding: 0.8em; display: grid; grid-template-columns: 52px 1fr; gap: 0.8em; }
                 .direction .index { font-weight: bold; color: var(--text-light-color); background: var(--secondary-color); width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border-radius: 10px; box-shadow: 0 8px 0 var(--primary-color); }
-                .review-card { border: 2px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1em; display: flex; flex-direction: column; gap: 0.5em; }
+                .review-card { border: 2px solid var(--border-color, #e2e8f0); border-radius: 12px; padding: 1em; display: flex; flex-direction: column; gap: 0.5em; color: var(--text-color); }
+                .overview-card, .reviews-card { color: var(--text-color); }
                 .review-header { display: flex; justify-content: space-between; align-items: center; }
                 .review-author { font-weight: bold; }
                 .review-date { font-size: 0.8em; opacity: 0.6; }
@@ -409,7 +410,7 @@ export default function RecipePage() {
                 .reviews-list { display: flex; flex-direction: column; gap: 1em; margin-top: 0.5em; }
             `}</style>
             <div className="container">
-                <div className="card">
+                <div className="card overview-card">
                     <div className="overview">
                         <div className="info">
                             <h1>{title}</h1>
@@ -488,7 +489,7 @@ export default function RecipePage() {
                     </ol>
                 </div>
 
-                <div className="card">
+                <div className="card reviews-card">
                     <h2>Reviews</h2>
 
                     {loggedIn ? (

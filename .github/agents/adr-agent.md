@@ -1,7 +1,5 @@
 ---
-description: Generate a new Architecture Decision Record (ADR) in the
-  OnTheMenu format using project-specific context and scorecard metrics
-  supplied in user input.
+description: Generate a new Architecture Decision Record (ADR) in the OnTheMenu format using project-specific context and scorecard metrics supplied in user input.
 ---
 
 ## User Input

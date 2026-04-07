@@ -56,6 +56,7 @@ export default function RecipeCard({ recipe, currentUserId, priority }: RecipeCa
 				{`
 					.featuredImage {
 						width: 100%;
+						aspect-ratio: 4 / 3;
 						max-width: 400px;
 						align-self: center;
 						border-radius: 12px;

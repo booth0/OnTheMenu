@@ -42,9 +42,16 @@ export default function YourRecipesPage() {
 
   return (
     <main className="container">
+      <style>
+        {`
+          select {
+            margin-bottom: 1em;
+          }
+        `}
+      </style>
       <h1>Your Recipes</h1>
       <Link href="/recipe/new"><button>Add New Recipe</button></Link>
-      {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
+      {recipes.length > 0 && <RecipeSortSelect id="your-recipe-sort" value={sort} onChange={setSort} />}
 
       {recipes.length === 0 ? (
         <p>You haven't created any recipes yet.</p>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Button from "@/components/ui/button";
 import ImageViewer from "@/components/ui/imageViewer";
 import { useParams, useRouter } from "next/navigation";
+import { useRecipeSocket } from "@/hooks/useSocket";
 
 
 type RecipeResponse = {
@@ -126,6 +127,33 @@ export default function RecipePage() {
     const [reviewError, setReviewError] = useState<string | null>(null);
     const [reviewImageUploading, setReviewImageUploading] = useState(false);
     const imageInputRef = useRef<HTMLInputElement>(null);
+    const [rating, setRating] = useState(0);
+
+    // ── Realtime updates via Socket.IO ──────────────────────────────
+    useRecipeSocket(slug, {
+        onLikesUpdated(data) {
+            setLikesCount(data.likesCount);
+        },
+        onReviewAdded(data) {
+            // Replace optimistic review if it exists, otherwise prepend
+            setReviews(prev => {
+                const idx = prev.findIndex(r => r.id === data.review.id);
+                if (idx !== -1) {
+                    const updated = [...prev];
+                    updated[idx] = data.review;
+                    return updated;
+                }
+                return [data.review, ...prev];
+            });
+            setReviewsCount(data.reviewsCount);
+            setRating(data.rating);
+        },
+        onReviewDeleted(data) {
+            setReviews(prev => prev.filter(r => r.id !== data.reviewId));
+            setReviewsCount(data.reviewsCount);
+            setRating(data.rating);
+        },
+    });
 
     useEffect(() => {
         const isLoggedIn = document.cookie.split(";").some(c => c.trim().startsWith("loggedIn="));
@@ -160,6 +188,7 @@ export default function RecipePage() {
                 setLikesCount(data.likes ?? 0);
                 setSavesCount(data.saves ?? 0);
                 setReviewsCount(data.reviews ?? 0);
+                setRating(data.rating ?? 0);
             })
             .catch(err => { if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load recipe."); })
             .finally(() => { if (!cancelled) setLoading(false); });
@@ -207,7 +236,7 @@ export default function RecipePage() {
     }
 
     async function handleToggleLike() {
-        if (!loggedIn) { router.push("/auth/login"); return; }
+        if (!loggedIn) { router.push("/login"); return; }
         const prev = likedByUser;
         setLikedByUser(!prev);
         setLikesCount(c => prev ? c - 1 : c + 1);
@@ -223,7 +252,7 @@ export default function RecipePage() {
     }
 
     async function handleToggleSave() {
-        if (!loggedIn) { router.push("/auth/login"); return; }
+        if (!loggedIn) { router.push("/login"); return; }
         const prev = savedByUser;
         setSavedByUser(!prev);
         setSavesCount(c => prev ? Math.max(0, c - 1) : c + 1);
@@ -262,7 +291,7 @@ export default function RecipePage() {
 
     async function handleReviewSubmit(e: React.FormEvent) {
         e.preventDefault();
-        if (!loggedIn) { router.push("/auth/login"); return; }
+        if (!loggedIn) { router.push("/login"); return; }
         if (reviewRating === 0) { setReviewError("Please select a rating."); return; }
         setReviewSubmitting(true);
         setReviewError(null);
@@ -274,7 +303,15 @@ export default function RecipePage() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data?.error ?? "Failed to submit review");
-            setReviews(prev => [data, ...prev]);
+            setReviews(prev => {
+                const idx = prev.findIndex(r => r.id === data.id);
+                if (idx !== -1) {
+                    const updated = [...prev];
+                    updated[idx] = data;
+                    return updated;
+                }
+                return [data, ...prev];
+            });
             setReviewsCount(c => c + 1);
             setReviewRating(0);
             setReviewBody("");
@@ -340,7 +377,6 @@ export default function RecipePage() {
     if (error || !recipe) return <main><div className="container"><div className="card"><h1>Unable to load recipe</h1><p>{error ?? "Recipe not found."}</p></div></div></main>;
 
     const { title, featuredImage } = recipe;
-    const rating = recipe.rating ?? 0;
     const ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients : [];
     const directions = Array.isArray(recipe.directions) ? recipe.directions : [];
     const isModerator = currentUserRole === 'MODERATOR' || currentUserRole === 'ADMIN';
@@ -521,7 +557,7 @@ export default function RecipePage() {
                             </div>
                         </form>
                     ) : (
-                        <p><a href="/auth/login" style={{ color: "var(--primary-color)" }}>Log in</a> to leave a review.</p>
+                        <p><a href="/login" style={{ color: "var(--secondary-color)" }}>Log in</a> to leave a review.</p>
                     )}
 
                     <hr style={{ margin: "1.5em 0", opacity: 0.15 }} />

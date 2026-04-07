@@ -63,14 +63,14 @@ export default function NewRecipePage() {
                 body: JSON.stringify(recipe)
             });
 
-            let payload: any = null;
+            let payload: { slug?: string; error?: string } | null = null;
             try {
                 payload = await res.json();
             } catch {
                 payload = null;
             }
 
-            if (res.ok) {
+            if (res.ok && payload) {
                 window.location.href = `/recipe/${payload.slug}`;
             } else {
                 alert(`Error: ${payload?.error ?? `Request failed with status ${res.status}`}`);

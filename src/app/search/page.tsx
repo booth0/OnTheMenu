@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect, useState, useMemo, Suspense } from 'react'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
 import RecipeSortSelect, { type SortOption, sortRecipes } from '@/components/recipe/RecipeSortSelect'
+import type { RecipeApiItem } from '@/types/api'
 
 function SearchResults() {
   const searchParams = useSearchParams()
@@ -27,7 +28,7 @@ function SearchResults() {
     async function fetchRecipes() {
       const res = await fetch(`/api/recipes/search?query=${encodeURIComponent(query)}`)
       const data = await res.json()
-      const mapped: RecipeCardRecipe[] = data.recipes.map((r: any) => ({
+      const mapped: RecipeCardRecipe[] = (data as { recipes: RecipeApiItem[] }).recipes.map((r: RecipeApiItem) => ({
         id: r.id,
         slug: r.slug,
         title: r.title,

@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
 import RecipeSortSelect, { type SortOption, sortRecipes } from '@/components/recipe/RecipeSortSelect'
+import type { RecipeApiItem } from '@/types/api'
 
 export default function YourRecipesPage() {
   const [recipes, setRecipes] = useState<RecipeCardRecipe[]>([])
@@ -20,7 +21,7 @@ export default function YourRecipesPage() {
       const res = await fetch('/api/recipes/your')
 
       const data = await res.json()
-      const mapped: RecipeCardRecipe[] = data.map((r: any) => ({
+      const mapped: RecipeCardRecipe[] = data.map((r: RecipeApiItem) => ({
         id: r.id,
         slug: r.slug,
         title: r.title,

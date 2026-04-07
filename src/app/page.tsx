@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import RecipeCard, { type RecipeCardRecipe } from '@/components/recipe/RecipeCard'
 import { RecipeGridSkeleton } from '@/components/recipe/RecipeCardSkeleton'
+import type { RecipeApiItem } from '@/types/api'
 
 export default function HomePage() {
   const [featured, setFeatured] = useState<RecipeCardRecipe[]>([])
@@ -18,7 +19,7 @@ export default function HomePage() {
 
     fetch('/api/recipes/featured')
       .then(r => r.json())
-      .then((data: any[]) => {
+      .then((data: RecipeApiItem[]) => {
         setFeatured(
           data.map(r => ({
             id: r.id,

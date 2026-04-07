@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/slug";
 import { getAuthUser } from "@/lib/auth";
@@ -74,30 +75,34 @@ export async function POST(req: Request) {
                     }
                 })
                 return NextResponse.json(created, {status: 201});
-            } catch (err: any) {
-                const code = err?.code ?? err?.meta?.target
-                if (err?.code === 'P2002' && err?.meta?.target?.includes('slug')) {
+            } catch (err: unknown) {
+                if (
+                    err instanceof Prisma.PrismaClientKnownRequestError &&
+                    err.code === 'P2002' &&
+                    (err.meta?.target as string[] | undefined)?.includes('slug')
+                ) {
                     tries++;
                     slug = `${baseSlug}-${tries}`;
                     continue;
                 }
 
                 console.error("Recipe create failed:", {
-                    code: err?.code,
-                    message: err?.message,
-                    meta: err?.meta,
+                    code: err instanceof Prisma.PrismaClientKnownRequestError ? err.code : undefined,
+                    message: err instanceof Error ? err.message : undefined,
+                    meta: err instanceof Prisma.PrismaClientKnownRequestError ? err.meta : undefined,
                     authUserId: authUser.id,
                 });
 
                 throw err;
             }
         }
-    } catch (err: any) {
+    } catch (err: unknown) {
+        const isPrismaErr = err instanceof Prisma.PrismaClientKnownRequestError;
         return NextResponse.json(
             {
-                error: err?.message ?? 'Internal server error',
-                code: err?.code ?? null,
-                meta: err?.meta ?? null,
+                error: err instanceof Error ? err.message : 'Internal server error',
+                code: isPrismaErr ? err.code : null,
+                meta: isPrismaErr ? err.meta : null,
             },
             { status: 500 }
         );

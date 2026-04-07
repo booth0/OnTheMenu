@@ -42,7 +42,7 @@ export default function SavedRecipesPage() {
   return (
     <main className="container">
       <h1>Saved Recipes</h1>
-      {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
+      {recipes.length > 0 && <RecipeSortSelect id="saved-recipes-sort" value={sort} onChange={setSort} />}
 
       {recipes.length === 0 ? (
         <p>You haven't saved any recipes yet.</p>

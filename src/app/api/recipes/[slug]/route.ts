@@ -101,6 +101,17 @@ export async function PUT(req: Request, { params }: { params: Promise<{ slug: st
     const featuredImage = body?.featuredImage ?? body?.featuredImageUrl ?? null;
     // Check ownership or permissions here (not implemented)
     try {
+        const existing = await prisma.recipe.findUnique({
+            where: { slug },
+            select: { forcedPrivate: true },
+        });
+        if (existing?.forcedPrivate && body.visibility === 'PUBLIC') {
+            return NextResponse.json(
+                { error: 'This recipe has been locked to private by a moderator.' },
+                { status: 403 }
+            );
+        }
+
         const updated = await prisma.recipe.update({
             where: { slug },
             data: {

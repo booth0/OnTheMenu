@@ -46,8 +46,7 @@ export default function RecipeCard({ recipe, currentUserId }: RecipeCardProps) {
 			day: "numeric",
 		});
 	};
-	const isOwner = currentUserId != null && author?.id === currentUserId;
-	const href = isOwner ? `/recipe/edit/${slug}` : `/recipe/${slug}`;
+	const href = `/recipe/${slug}`;
 
 	return (
 		<article className="card">

@@ -40,6 +40,8 @@ export type RecipeMinAggregateOutputType = {
   title: string | null
   description: string | null
   visibility: $Enums.Visibility | null
+  forcedPrivate: boolean | null
+  forcedPrivateReason: string | null
   featuredImage: string | null
   authorId: string | null
   viewsCount: number | null
@@ -53,6 +55,8 @@ export type RecipeMaxAggregateOutputType = {
   title: string | null
   description: string | null
   visibility: $Enums.Visibility | null
+  forcedPrivate: boolean | null
+  forcedPrivateReason: string | null
   featuredImage: string | null
   authorId: string | null
   viewsCount: number | null
@@ -68,6 +72,8 @@ export type RecipeCountAggregateOutputType = {
   ingredients: number
   directions: number
   visibility: number
+  forcedPrivate: number
+  forcedPrivateReason: number
   featuredImage: number
   authorId: number
   viewsCount: number
@@ -91,6 +97,8 @@ export type RecipeMinAggregateInputType = {
   title?: true
   description?: true
   visibility?: true
+  forcedPrivate?: true
+  forcedPrivateReason?: true
   featuredImage?: true
   authorId?: true
   viewsCount?: true
@@ -104,6 +112,8 @@ export type RecipeMaxAggregateInputType = {
   title?: true
   description?: true
   visibility?: true
+  forcedPrivate?: true
+  forcedPrivateReason?: true
   featuredImage?: true
   authorId?: true
   viewsCount?: true
@@ -119,6 +129,8 @@ export type RecipeCountAggregateInputType = {
   ingredients?: true
   directions?: true
   visibility?: true
+  forcedPrivate?: true
+  forcedPrivateReason?: true
   featuredImage?: true
   authorId?: true
   viewsCount?: true
@@ -221,6 +233,8 @@ export type RecipeGroupByOutputType = {
   ingredients: string[]
   directions: string[]
   visibility: $Enums.Visibility
+  forcedPrivate: boolean
+  forcedPrivateReason: string | null
   featuredImage: string | null
   authorId: string
   viewsCount: number
@@ -259,6 +273,8 @@ export type RecipeWhereInput = {
   ingredients?: Prisma.StringNullableListFilter<"Recipe">
   directions?: Prisma.StringNullableListFilter<"Recipe">
   visibility?: Prisma.EnumVisibilityFilter<"Recipe"> | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFilter<"Recipe"> | boolean
+  forcedPrivateReason?: Prisma.StringNullableFilter<"Recipe"> | string | null
   featuredImage?: Prisma.StringNullableFilter<"Recipe"> | string | null
   authorId?: Prisma.StringFilter<"Recipe"> | string
   viewsCount?: Prisma.IntFilter<"Recipe"> | number
@@ -281,6 +297,8 @@ export type RecipeOrderByWithRelationInput = {
   ingredients?: Prisma.SortOrder
   directions?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  forcedPrivate?: Prisma.SortOrder
+  forcedPrivateReason?: Prisma.SortOrderInput | Prisma.SortOrder
   featuredImage?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -306,6 +324,8 @@ export type RecipeWhereUniqueInput = Prisma.AtLeast<{
   ingredients?: Prisma.StringNullableListFilter<"Recipe">
   directions?: Prisma.StringNullableListFilter<"Recipe">
   visibility?: Prisma.EnumVisibilityFilter<"Recipe"> | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFilter<"Recipe"> | boolean
+  forcedPrivateReason?: Prisma.StringNullableFilter<"Recipe"> | string | null
   featuredImage?: Prisma.StringNullableFilter<"Recipe"> | string | null
   authorId?: Prisma.StringFilter<"Recipe"> | string
   viewsCount?: Prisma.IntFilter<"Recipe"> | number
@@ -328,6 +348,8 @@ export type RecipeOrderByWithAggregationInput = {
   ingredients?: Prisma.SortOrder
   directions?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  forcedPrivate?: Prisma.SortOrder
+  forcedPrivateReason?: Prisma.SortOrderInput | Prisma.SortOrder
   featuredImage?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -351,6 +373,8 @@ export type RecipeScalarWhereWithAggregatesInput = {
   ingredients?: Prisma.StringNullableListFilter<"Recipe">
   directions?: Prisma.StringNullableListFilter<"Recipe">
   visibility?: Prisma.EnumVisibilityWithAggregatesFilter<"Recipe"> | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolWithAggregatesFilter<"Recipe"> | boolean
+  forcedPrivateReason?: Prisma.StringNullableWithAggregatesFilter<"Recipe"> | string | null
   featuredImage?: Prisma.StringNullableWithAggregatesFilter<"Recipe"> | string | null
   authorId?: Prisma.StringWithAggregatesFilter<"Recipe"> | string
   viewsCount?: Prisma.IntWithAggregatesFilter<"Recipe"> | number
@@ -366,6 +390,8 @@ export type RecipeCreateInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -387,6 +413,8 @@ export type RecipeUncheckedCreateInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -408,6 +436,8 @@ export type RecipeUpdateInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -429,6 +459,8 @@ export type RecipeUncheckedUpdateInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -450,6 +482,8 @@ export type RecipeCreateManyInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -465,6 +499,8 @@ export type RecipeUpdateManyMutationInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -479,6 +515,8 @@ export type RecipeUncheckedUpdateManyInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -512,6 +550,8 @@ export type RecipeCountOrderByAggregateInput = {
   ingredients?: Prisma.SortOrder
   directions?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  forcedPrivate?: Prisma.SortOrder
+  forcedPrivateReason?: Prisma.SortOrder
   featuredImage?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -529,6 +569,8 @@ export type RecipeMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  forcedPrivate?: Prisma.SortOrder
+  forcedPrivateReason?: Prisma.SortOrder
   featuredImage?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -542,6 +584,8 @@ export type RecipeMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
+  forcedPrivate?: Prisma.SortOrder
+  forcedPrivateReason?: Prisma.SortOrder
   featuredImage?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   viewsCount?: Prisma.SortOrder
@@ -755,6 +799,8 @@ export type RecipeCreateWithoutAuthorInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -775,6 +821,8 @@ export type RecipeUncheckedCreateWithoutAuthorInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -805,6 +853,8 @@ export type RecipeCreateWithoutSavedByUsersInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -825,6 +875,8 @@ export type RecipeUncheckedCreateWithoutSavedByUsersInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -869,6 +921,8 @@ export type RecipeScalarWhereInput = {
   ingredients?: Prisma.StringNullableListFilter<"Recipe">
   directions?: Prisma.StringNullableListFilter<"Recipe">
   visibility?: Prisma.EnumVisibilityFilter<"Recipe"> | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFilter<"Recipe"> | boolean
+  forcedPrivateReason?: Prisma.StringNullableFilter<"Recipe"> | string | null
   featuredImage?: Prisma.StringNullableFilter<"Recipe"> | string | null
   authorId?: Prisma.StringFilter<"Recipe"> | string
   viewsCount?: Prisma.IntFilter<"Recipe"> | number
@@ -900,6 +954,8 @@ export type RecipeCreateWithoutReviewsInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -920,6 +976,8 @@ export type RecipeUncheckedCreateWithoutReviewsInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -956,6 +1014,8 @@ export type RecipeUpdateWithoutReviewsInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -976,6 +1036,8 @@ export type RecipeUncheckedUpdateWithoutReviewsInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -996,6 +1058,8 @@ export type RecipeCreateWithoutLikesInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -1016,6 +1080,8 @@ export type RecipeUncheckedCreateWithoutLikesInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -1052,6 +1118,8 @@ export type RecipeUpdateWithoutLikesInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1072,6 +1140,8 @@ export type RecipeUncheckedUpdateWithoutLikesInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1092,6 +1162,8 @@ export type RecipeCreateWithoutImagesInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -1112,6 +1184,8 @@ export type RecipeUncheckedCreateWithoutImagesInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -1148,6 +1222,8 @@ export type RecipeUpdateWithoutImagesInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1168,6 +1244,8 @@ export type RecipeUncheckedUpdateWithoutImagesInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1188,6 +1266,8 @@ export type RecipeCreateWithoutBooksInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -1208,6 +1288,8 @@ export type RecipeUncheckedCreateWithoutBooksInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -1244,6 +1326,8 @@ export type RecipeUpdateWithoutBooksInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1264,6 +1348,8 @@ export type RecipeUncheckedUpdateWithoutBooksInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1284,6 +1370,8 @@ export type RecipeCreateWithoutFlagsInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -1304,6 +1392,8 @@ export type RecipeUncheckedCreateWithoutFlagsInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   authorId: string
   viewsCount?: number
@@ -1340,6 +1430,8 @@ export type RecipeUpdateWithoutFlagsInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1360,6 +1452,8 @@ export type RecipeUncheckedUpdateWithoutFlagsInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1380,6 +1474,8 @@ export type RecipeCreateManyAuthorInput = {
   ingredients?: Prisma.RecipeCreateingredientsInput | string[]
   directions?: Prisma.RecipeCreatedirectionsInput | string[]
   visibility?: $Enums.Visibility
+  forcedPrivate?: boolean
+  forcedPrivateReason?: string | null
   featuredImage?: string | null
   viewsCount?: number
   createdAt?: Date | string
@@ -1394,6 +1490,8 @@ export type RecipeUpdateWithoutAuthorInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1414,6 +1512,8 @@ export type RecipeUncheckedUpdateWithoutAuthorInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1434,6 +1534,8 @@ export type RecipeUncheckedUpdateManyWithoutAuthorInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1448,6 +1550,8 @@ export type RecipeUpdateWithoutSavedByUsersInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1468,6 +1572,8 @@ export type RecipeUncheckedUpdateWithoutSavedByUsersInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1488,6 +1594,8 @@ export type RecipeUncheckedUpdateManyWithoutSavedByUsersInput = {
   ingredients?: Prisma.RecipeUpdateingredientsInput | string[]
   directions?: Prisma.RecipeUpdatedirectionsInput | string[]
   visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  forcedPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  forcedPrivateReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   featuredImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   viewsCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1579,6 +1687,8 @@ export type RecipeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   ingredients?: boolean
   directions?: boolean
   visibility?: boolean
+  forcedPrivate?: boolean
+  forcedPrivateReason?: boolean
   featuredImage?: boolean
   authorId?: boolean
   viewsCount?: boolean
@@ -1602,6 +1712,8 @@ export type RecipeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   ingredients?: boolean
   directions?: boolean
   visibility?: boolean
+  forcedPrivate?: boolean
+  forcedPrivateReason?: boolean
   featuredImage?: boolean
   authorId?: boolean
   viewsCount?: boolean
@@ -1618,6 +1730,8 @@ export type RecipeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   ingredients?: boolean
   directions?: boolean
   visibility?: boolean
+  forcedPrivate?: boolean
+  forcedPrivateReason?: boolean
   featuredImage?: boolean
   authorId?: boolean
   viewsCount?: boolean
@@ -1634,6 +1748,8 @@ export type RecipeSelectScalar = {
   ingredients?: boolean
   directions?: boolean
   visibility?: boolean
+  forcedPrivate?: boolean
+  forcedPrivateReason?: boolean
   featuredImage?: boolean
   authorId?: boolean
   viewsCount?: boolean
@@ -1641,7 +1757,7 @@ export type RecipeSelectScalar = {
   updatedAt?: boolean
 }
 
-export type RecipeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "ingredients" | "directions" | "visibility" | "featuredImage" | "authorId" | "viewsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["recipe"]>
+export type RecipeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "ingredients" | "directions" | "visibility" | "forcedPrivate" | "forcedPrivateReason" | "featuredImage" | "authorId" | "viewsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["recipe"]>
 export type RecipeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   images?: boolean | Prisma.Recipe$imagesArgs<ExtArgs>
   likes?: boolean | Prisma.Recipe$likesArgs<ExtArgs>
@@ -1678,6 +1794,8 @@ export type $RecipePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     ingredients: string[]
     directions: string[]
     visibility: $Enums.Visibility
+    forcedPrivate: boolean
+    forcedPrivateReason: string | null
     featuredImage: string | null
     authorId: string
     viewsCount: number
@@ -2120,6 +2238,8 @@ export interface RecipeFieldRefs {
   readonly ingredients: Prisma.FieldRef<"Recipe", 'String[]'>
   readonly directions: Prisma.FieldRef<"Recipe", 'String[]'>
   readonly visibility: Prisma.FieldRef<"Recipe", 'Visibility'>
+  readonly forcedPrivate: Prisma.FieldRef<"Recipe", 'Boolean'>
+  readonly forcedPrivateReason: Prisma.FieldRef<"Recipe", 'String'>
   readonly featuredImage: Prisma.FieldRef<"Recipe", 'String'>
   readonly authorId: Prisma.FieldRef<"Recipe", 'String'>
   readonly viewsCount: Prisma.FieldRef<"Recipe", 'Int'>

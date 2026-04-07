@@ -1048,6 +1048,8 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
+  isBanned: 'isBanned',
+  banReason: 'banReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1063,6 +1065,8 @@ export const RecipeScalarFieldEnum = {
   ingredients: 'ingredients',
   directions: 'directions',
   visibility: 'visibility',
+  forcedPrivate: 'forcedPrivate',
+  forcedPrivateReason: 'forcedPrivateReason',
   featuredImage: 'featuredImage',
   authorId: 'authorId',
   viewsCount: 'viewsCount',
@@ -1198,6 +1202,13 @@ export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'Role[]'
  */
 export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

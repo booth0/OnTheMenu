@@ -36,7 +36,7 @@ export default function EditRecipePage() {
   const [newFeaturedImage, setNewFeaturedImage] = useState<File | null>(null);
 
   useEffect(() => {
-    setLoggedIn(!!localStorage.getItem('sessionId'));
+    setLoggedIn(document.cookie.split(';').some(c => c.trim().startsWith('loggedIn=')));
   }, []);
 
   useEffect(() => {
@@ -206,9 +206,9 @@ export default function EditRecipePage() {
       <div className="card">
         <form onSubmit={handleSubmit} className="editForm">
           <label htmlFor="visibility">Is this recipe public or private?</label>
-          <select id="visibility" name="visibility" value={recipe.visibility.toLowerCase()} onChange={handleChange} required>
-            <option value="public">Public</option>
-            <option value="private">Private</option>
+          <select id="visibility" name="visibility" value={recipe.visibility} onChange={handleChange} required>
+            <option value="PUBLIC">Public</option>
+            <option value="PRIVATE">Private</option>
           </select>
 
           <label htmlFor="title">Title</label>

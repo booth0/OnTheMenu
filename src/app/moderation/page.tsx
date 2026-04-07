@@ -157,7 +157,7 @@ export default function ModerationPage() {
   return (
     <main>
       <style>{`
-        .mod-tabs { display: flex; gap: 0.5em; margin-bottom: 1em; }
+        .mod-tabs { display: flex; flex-wrap: wrap; gap: 0.5em; margin-bottom: 1em; }
         .mod-tab { padding: 0.5em 1.2em; border-radius: 8px; border: 2px solid var(--secondary-color); background: white; cursor: pointer; font-weight: bold; font-size: 1em; color: var(--secondary-color); }
         .mod-tab.active { background: var(--secondary-color); color: white; }
         .mod-search { width: 100%; padding: 0.5em 0.8em; border-radius: 8px; border: 2px solid var(--primary-color); font-size: 1em; margin-bottom: 1em; box-sizing: border-box; }
@@ -185,6 +185,14 @@ export default function ModerationPage() {
         .recipe-link { color: var(--secondary-color); font-weight: bold; text-decoration: none; }
         .recipe-link:hover { text-decoration: underline; }
         .reason-cell { max-width: 200px; font-size: 0.9em; opacity: 0.8; }
+        @media (max-width: 640px) {
+          .mod-table thead { display: none; }
+          .mod-table tr { display: block; margin-bottom: 1em; border: 2px solid var(--primary-color); border-radius: 12px; overflow: hidden; }
+          .mod-table td { display: flex; justify-content: space-between; align-items: center; padding: 0.6em 0.8em; border-bottom: 1px solid #e2e8f0; }
+          .mod-table td:last-child { border-bottom: none; }
+          .mod-table td::before { content: attr(data-label); font-weight: bold; opacity: 0.7; font-size: 0.85em; margin-right: 1em; flex-shrink: 0; }
+          .reason-cell { max-width: unset; }
+        }
       `}</style>
 
       <div className="container">
@@ -235,12 +243,12 @@ export default function ModerationPage() {
                 <tbody>
                   {filteredUsers.map(user => (
                     <tr key={user.id}>
-                      <td>
+                      <td data-label="Username">
                         {user.username}
                         {user.isBanned && <span className="badge-banned">BANNED</span>}
                       </td>
-                      <td>{user.email ?? '—'}</td>
-                      <td>
+                      <td data-label="Email">{user.email ?? '—'}</td>
+                      <td data-label="Role">
                         {currentUserRole === 'ADMIN' ? (
                           <select
                             className="role-select"
@@ -256,7 +264,7 @@ export default function ModerationPage() {
                           user.role
                         )}
                       </td>
-                      <td>
+                      <td data-label="Actions">
                         <div className="action-row">
                           {user.isBanned ? (
                             canBan(user.role) && (
@@ -303,14 +311,14 @@ export default function ModerationPage() {
                 <tbody>
                   {filteredRecipes.map(recipe => (
                     <tr key={recipe.id}>
-                      <td>
+                      <td data-label="Title">
                         <Link href={`/recipe/${recipe.slug}`} className="recipe-link">
                           {recipe.title}
                         </Link>
                       </td>
-                      <td>{recipe.author.username}</td>
-                      <td className="reason-cell">{recipe.forcedPrivateReason ?? '—'}</td>
-                      <td>
+                      <td data-label="Author">{recipe.author.username}</td>
+                      <td data-label="Reason" className="reason-cell">{recipe.forcedPrivateReason ?? '—'}</td>
+                      <td data-label="Action">
                         <button
                           className="btn-unlock"
                           disabled={unlockingSlug === recipe.slug}

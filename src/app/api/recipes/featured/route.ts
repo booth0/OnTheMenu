@@ -5,7 +5,7 @@ export async function GET() {
     const recipes = await prisma.recipe.findMany({
         where: { visibility: "PUBLIC" },
         orderBy: { likes: { _count: "desc" } },
-        take: 5,
+        take: 3,
         select: {
             id: true,
             title: true,

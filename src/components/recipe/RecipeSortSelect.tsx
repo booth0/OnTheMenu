@@ -59,6 +59,7 @@ export default function RecipeSortSelect({ value, onChange }: RecipeSortSelectPr
         cursor: 'pointer',
         background: 'white',
         color: 'var(--text-color)',
+        marginBottom: '1rem',
       }}
     >
       {(Object.entries(SORT_LABELS) as [SortOption, string][]).map(([key, label]) => (

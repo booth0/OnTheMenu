@@ -26,16 +26,18 @@ export default function RecipeBooksPage() {
 
   return (
     <main className="container">
-      <h1>My Recipe Books</h1>
-      <Link href="/recipe-books/new"><button className="primary">Create New Recipe Book</button></Link>
+      <div className="page-header">
+        <h1>My Recipe Books</h1>
+        <Link href="/recipe-books/new" className="btn-accent">+ Create New Recipe Book</Link>
+      </div>
 
       {books.length === 0 ? (
         <p>You don&apos;t have any recipe books yet.</p>
       ) : (
-        <div>
+        <div className="featured-grid">
           {books.map((book) => (
             <Link href={`/recipe-books/${book.id}`} key={book.id} style={{ textDecoration: 'none' }}>
-              <div className="card" style={{ color: 'var(--text-color)' }}>
+              <div className="card">
                 <h2>{book.title}</h2>
                 {book.description && <p>{book.description}</p>}
                 <p>{book._count.items} {book._count.items === 1 ? 'recipe' : 'recipes'}</p>

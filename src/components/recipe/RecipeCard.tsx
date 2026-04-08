@@ -25,9 +25,10 @@ interface RecipeCardProps {
 	recipe: RecipeCardRecipe;
 	currentUserId?: string | null;
 	priority?: boolean;
+	actionSlot?: React.ReactNode;
 }
 
-export default function RecipeCard({ recipe, currentUserId, priority }: RecipeCardProps) {
+export default function RecipeCard({ recipe, currentUserId, priority, actionSlot }: RecipeCardProps) {
 	const {
 		slug,
 		title,
@@ -97,6 +98,7 @@ export default function RecipeCard({ recipe, currentUserId, priority }: RecipeCa
 					<span>Reviews: {reviewsCount ?? 0}</span>
 				</div>
 			</div>
+			{actionSlot}
 		</article>
 	);
 }

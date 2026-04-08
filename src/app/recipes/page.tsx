@@ -44,8 +44,10 @@ export default function RecipesPage() {
 
   return (
     <main className="container">
-      <h1>Browse Recipes</h1>
-      {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
+      <div className="page-header">
+        <h1>Browse Recipes</h1>
+        {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
+      </div>
 
       {loading ? (
         <RecipeGridSkeleton count={6} />

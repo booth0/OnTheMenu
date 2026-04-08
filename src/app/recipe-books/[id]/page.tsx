@@ -85,23 +85,31 @@ export default function RecipeBookPage() {
 
   return (
     <main className="container">
-      <h1>{book.title}</h1>
-      {book.description && <p>{book.description}</p>}
-      <button onClick={deleteBook}>
-        Delete Recipe Book
-      </button>
+      <div className="page-header">
+        <div>
+          <h1>{book.title}</h1>
+          {book.description && <p>{book.description}</p>}
+        </div>
+        <button onClick={deleteBook} className="secondary">
+          Delete Recipe Book
+        </button>
+      </div>
 
       {recipes.length === 0 ? (
         <p>No recipes in this book yet.</p>
       ) : (
-        <div>
+        <div className="featured-grid">
           {recipes.map((recipe) => (
-            <div key={recipe.id}>
-              <RecipeCard recipe={recipe} currentUserId={currentUserId} />
-              <button onClick={() => removeRecipe(recipe.id)}>
-                Remove from book
-              </button>
-            </div>
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              currentUserId={currentUserId}
+              actionSlot={
+                <button onClick={() => removeRecipe(recipe.id)} className="secondary" style={{ width: '100%' }}>
+                  Remove from book
+                </button>
+              }
+            />
           ))}
         </div>
       )}

@@ -79,6 +79,30 @@ button {
     }
 }
 
+.btn-accent {
+    background: var(--accent-color);
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 3px 0 var(--accent-shadow);
+    transition: transform 0.1s, box-shadow 0.1s;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.btn-accent:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 var(--accent-shadow);
+}
+
+.btn-accent:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--accent-shadow);
+}
+
 .imageViewer {
     max-width: 500px;
     width:100%;
@@ -132,6 +156,15 @@ button {
     h2 {
         margin-bottom: 1rem;
     }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0;
 }
 
 .featured-grid {

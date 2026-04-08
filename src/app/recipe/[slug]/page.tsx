@@ -446,7 +446,7 @@ export default function RecipePage() {
                                     {bookMessage && <p style={{ margin: 0, padding: "0.3em 0.6em", fontWeight: "bold" }}>{bookMessage}</p>}
                                     {!bookMessage && books.map(b => <button key={b.id} onClick={() => addToBook(b.id)}>{b.title}</button>)}
                                     {!bookMessage && books.length === 0 && <p style={{ margin: 0, padding: "0.3em 0.6em" }}>No recipe books yet</p>}
-                                    {!bookMessage && <button onClick={() => router.push("/recipe-books/new")} style={{ borderTop: "1px solid #eee", fontWeight: "bold" }}>+ Create New Book</button>}
+                                    {!bookMessage && <button onClick={() => router.push(`/recipe-books/new?recipeId=${(recipe as any).id}`)} style={{ borderTop: "1px solid #eee", fontWeight: "bold" }}>+ Create New Book</button>}
                                 </div>
                             )}
                         </div>

@@ -42,14 +42,16 @@ export default function YourRecipesPage() {
 
   return (
     <main className="container">
-      <h1>Your Recipes</h1>
-      <Link href="/recipe/new"><button>Add New Recipe</button></Link>
+      <div className="page-header">
+        <h1>Your Recipes</h1>
+        <Link href="/recipe/new" className="btn-accent">+ Add New Recipe</Link>
+      </div>
       {recipes.length > 0 && <RecipeSortSelect value={sort} onChange={setSort} />}
 
       {recipes.length === 0 ? (
         <p>You haven't created any recipes yet.</p>
       ) : (
-        <div>
+        <div className="featured-grid">
           {sorted.map((recipe) => (
             <RecipeCard key={recipe.id} recipe={recipe} currentUserId={currentUserId} />
           ))}

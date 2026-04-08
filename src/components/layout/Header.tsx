@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Search } from 'lucide-react'
 import styles from './Header.module.css'
 
 interface HeaderProps {
@@ -26,10 +26,8 @@ export default function Header({ isLoggedIn = false, username, role }: HeaderPro
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' })
-    router.push('/')
     router.refresh()
   }
-
   return (
     <header className={styles.siteHeader}>
       {/* Logo */}
@@ -43,7 +41,7 @@ export default function Header({ isLoggedIn = false, username, role }: HeaderPro
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit" className={styles.searchSubmit}>Search</button>
+        <button type="submit" className={styles.searchSubmit}><Search /></button>
       </form>
 
       {/* Desktop Nav */}

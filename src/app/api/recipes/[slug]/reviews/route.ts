@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthUser } from "@/lib/auth";
+import { emitReviewAdded } from "@/lib/socketServer";
 
 // GET /api/recipes/[slug]/reviews  — fetch all reviews for a recipe
 export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
@@ -58,6 +59,25 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
             images: { select: { id: true, url: true } },
         },
     });
+
+    // Compute aggregate stats asynchronously to avoid exhausting connection pool
+    prisma.review.aggregate({
+        where: { recipeId: recipe.id },
+        _avg: { rating: true },
+        _count: { id: true },
+    }).then(agg => {
+        const reviewsCount = agg._count.id;
+        const avgRating = Math.round((agg._avg.rating ?? 0) * 10) / 10;
+        emitReviewAdded({
+            slug,
+            review: {
+                ...review,
+                createdAt: review.createdAt.toISOString(),
+            },
+            rating: avgRating,
+                reviewsCount,
+        });
+    }).catch(() => {});
 
     return NextResponse.json(review, { status: 201 });
 }

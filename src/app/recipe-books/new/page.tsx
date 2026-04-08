@@ -58,6 +58,21 @@ export default function NewRecipeBookPage() {
 
   return (
     <main className="container">
+      <style>
+        {`
+          label {
+            display: block;
+            margin-bottom: 1em;
+            }
+            .card input[type="text"], .card textarea {
+              width: 100%;
+              padding: 0.5em;
+              border: 1px solid var(--border-color);
+              border-radius: 4px;
+              margin-top: 0.5em;
+            }
+          `}
+      </style>
       <h1>Create a Recipe Book</h1>
       <form onSubmit={handleSubmit} className="card" style={{ color: 'var(--text-color)' }}>
         <label>

@@ -12,6 +12,9 @@ const nunito = Nunito({ subsets: ["latin"], weight: ["200", "300", "400", "500",
 
 export const metadata: Metadata = {
   title: "OnTheMenu",
+  icons: {
+    icon: "/images/OnTheMenu.svg",
+  },
 };
 
 export default async function RootLayout({
